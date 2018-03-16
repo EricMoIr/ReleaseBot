@@ -1,0 +1,15 @@
+C:\Users\Eric\Documents\Bots\ReleaseBot\Persistence\bin\Debug\Persistence.exe.config
+C:\Users\Eric\Documents\Bots\ReleaseBot\Persistence\bin\Debug\Persistence.exe
+C:\Users\Eric\Documents\Bots\ReleaseBot\Persistence\bin\Debug\Persistence.pdb
+C:\Users\Eric\Documents\Bots\ReleaseBot\Persistence\obj\Debug\Persistence.exe
+C:\Users\Eric\Documents\Bots\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll.config
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.pdb
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.dll
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.xml
+C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache
