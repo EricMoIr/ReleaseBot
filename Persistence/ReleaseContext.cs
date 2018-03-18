@@ -9,7 +9,7 @@ namespace Persistence
     public class ReleaseContext : DbContext
     {
         public ReleaseContext() : base("name=ReleaseContext") { }
-        public DbSet<ReleaseDate> ReleaseDates { get; }
+        public DbSet<Release> ReleaseDates { get; }
         public DbSet<Releasable> Releasables { get; }
         public DbSet<SourceSubscription> SourceSubscriptions { get; }
         public DbSet<ItemSubscription> ItemSubscriptions { get; }
@@ -20,6 +20,9 @@ namespace Persistence
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+
+            modelBuilder.Entity<Release>()
+                .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL});
         }
 
         public virtual EntityState GetState(object entity)

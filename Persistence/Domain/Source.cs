@@ -12,8 +12,8 @@ namespace Persistence.Domain
     {
         [Key]
         public virtual string URL { get; set; }
-
         public DOM ReleaseHolder { get; set; }
+        public DOM ChapterNumberHolder { get; set; }
 
         public override int GetHashCode()
         {
@@ -26,6 +26,10 @@ namespace Persistence.Domain
                 return ((Source)obj).URL.Equals(URL);
             }
             return false;
+        }
+        public override string ToString()
+        {
+            return URL;
         }
     }
 }

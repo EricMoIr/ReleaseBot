@@ -12,6 +12,11 @@ namespace Persistence.Domain
         public string ClassAttribute { get; set; }
         public string IdAttribute { get; set; }
         public string Tag { get; set; }
+        public string ParentClassAttribute { get; set; }
+        //1-index
+        public int ChildPosition { get; set; }
+        public string ParentTag { get; set; }
+
         public string toXPATH()
         {
             if (string.IsNullOrEmpty(Tag))
@@ -20,7 +25,12 @@ namespace Persistence.Domain
             {
                 return "//" + Tag + "[@id='" + IdAttribute + "']";
             }
-            return "//" + Tag + "[@class='" + ClassAttribute + "']";
+            if (!string.IsNullOrEmpty(ClassAttribute))
+            {
+                return "//" + Tag + "[@class='" + ClassAttribute + "']";
+            }
+            return "//" + ParentTag + "[@class='" + ParentClassAttribute + "']"
+                + "/" + Tag + "[" + ChildPosition + "]";
         }
     }
 }

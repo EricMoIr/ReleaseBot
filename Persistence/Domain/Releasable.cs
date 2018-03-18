@@ -22,6 +22,10 @@ namespace Persistence.Domain
         //This is not against Liscow... There won't be a different behavior according to 
         //the type. It's only used for filters of releasables
         public string Type { get; set; }
+        public Releasable()
+        {
+            AlternativeTitles = new List<string>();
+        }
 
         public bool HasTitle(string title)
         {

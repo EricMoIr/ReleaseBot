@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{850A2983-7B67-427A-B8E8-A66F343DCF54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbToucher", "DbToucher\DbToucher.csproj", "{7BD03BD2-A2D9-4148-AFFB-BFF1941818EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{850A2983-7B67-427A-B8E8-A66F343DCF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850A2983-7B67-427A-B8E8-A66F343DCF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850A2983-7B67-427A-B8E8-A66F343DCF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BD03BD2-A2D9-4148-AFFB-BFF1941818EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BD03BD2-A2D9-4148-AFFB-BFF1941818EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BD03BD2-A2D9-4148-AFFB-BFF1941818EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BD03BD2-A2D9-4148-AFFB-BFF1941818EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

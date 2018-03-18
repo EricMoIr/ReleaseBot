@@ -7,7 +7,7 @@ namespace Persistence
     public class ReleaseUnitOfWork 
     {
         private ReleaseContext context;
-        public ReleaseRepository<ReleaseDate> ReleaseDates { get; }
+        public ReleaseRepository<Release> Releases { get; }
         public ReleaseRepository<Releasable> Releasables { get; }
         public ReleaseRepository<SourceSubscription> SourceSubscriptions { get; }
         public ReleaseRepository<ItemSubscription> ItemSubscriptions { get; }
@@ -20,7 +20,7 @@ namespace Persistence
         public ReleaseUnitOfWork()
         {
             context = new ReleaseContext();
-            ReleaseDates = new ReleaseRepository<ReleaseDate>(context);
+            Releases = new ReleaseRepository<Release>(context);
             Releasables = new ReleaseRepository<Releasable>(context);
             ItemSubscriptions = new ReleaseRepository<ItemSubscription>(context);
             SourceSubscriptions = new ReleaseRepository<SourceSubscription>(context);
