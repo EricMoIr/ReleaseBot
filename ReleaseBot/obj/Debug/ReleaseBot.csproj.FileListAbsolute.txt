@@ -45,3 +45,16 @@ C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\System.Interactive.Async
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\obj\Debug\ReleaseBot.exe
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\obj\Debug\ReleaseBot.pdb
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\obj\Debug\ReleaseBot.csprojResolveAssemblyReference.cache
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Services.dll
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Persistence.dll
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Backend.exe
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.dll
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Services.pdb
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Persistence.pdb
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Backend.pdb
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.xml
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.SqlServer.xml

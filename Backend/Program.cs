@@ -8,13 +8,12 @@ using System.Timers;
 
 namespace Backend
 {
-    class Program
+    public class Program
     {
         const double HALF_AN_HOUR = 1000 * 60 * 30;
         const double HOUR = HALF_AN_HOUR * 2;
         const double INTERVAL = HOUR;
 
-        private static List<Source> releaseURLs = new List<Source>();
         static void Mains(string[] args)
         {
             ReleaseUnitOfWork uow = new ReleaseUnitOfWork();
@@ -62,9 +61,9 @@ namespace Backend
             Console.Read();
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            releaseURLs.Add(new Source()
+            /*releaseURLs.Add(new Source()
             {
                 URL = "https://animeflv.net",
                 ReleaseHolder = new DOM()
@@ -93,16 +92,18 @@ namespace Backend
                     ParentClassAttribute = "rated_stars",
                     ChildPosition = 1
                 }
-            });
+            });*/
             LookForReleases();
-            Console.WriteLine("End");
             Timer checkForTime = new Timer(INTERVAL);
             checkForTime.Elapsed += new ElapsedEventHandler(LookForReleasesEvent);
             checkForTime.Enabled = true;
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         private static void LookForReleases()
         {
+            ReleaseUnitOfWork uow = new ReleaseUnitOfWork();
+            List<Source> releaseURLs = uow.Sources.Get().ToList();
+            Console.WriteLine("Started looking for releases");
             notifiedTitles.Clear();
             //this works assuming the next LookForReleases runs after the current
             //one is over
@@ -113,6 +114,7 @@ namespace Backend
                 StoreReleases(releases, source);
                 NotifySubscribers(source, releases);
             }
+            Console.WriteLine("Finished looking for releases");
         }
 
         private static void StoreReleases(List<FoundRelease> releases, Source source)

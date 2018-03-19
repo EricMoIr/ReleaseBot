@@ -3,10 +3,12 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Timers;
 using System.Threading;
 using System.Threading.Tasks;
+using Services.Domain;
+using System.Text;
+using Services;
 
 namespace ReleaseBot
 {
@@ -54,8 +56,8 @@ namespace ReleaseBot
             _commands.Log += Log;
 
             // Setup your DI container.
-        
-    }
+
+        }
 
         // Example of a logging handler. This can be re-used by addons
         // that ask for a Func<LogMessage, Task>.
@@ -81,15 +83,11 @@ namespace ReleaseBot
             Console.WriteLine($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");
             Console.ResetColor();
 
-            // If you get an error saying 'CompletedTask' doesn't exist,
-            // your project is targeting .NET 4.5.2 or lower. You'll need
-            // to adjust your project's target framework to 4.6 or higher
-            // (instructions for this are easily Googled).
-            // If you *need* to run on .NET 4.5 for compat/other reasons,
-            // the alternative is to 'return Task.Delay(0);' instead.
             return Task.CompletedTask;
         }
-
+        private double INTERVAL = 3600000; //one hour
+        Dictionary<string, Tuple<SocketCommandContext, List<ReleaseView>>> releasesOfServers
+            = new Dictionary<string, Tuple<SocketCommandContext, List<ReleaseView>>>();
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
@@ -99,8 +97,49 @@ namespace ReleaseBot
             await _client.LoginAsync(TokenType.Bot, "MjYyNzMxMzg4NjY1NDYyNzg1.DX48DQ.u6vJgafC628dfIWJ_3F8hWvBeuY");
             await _client.StartAsync();
 
+            System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
+            NotifyServers();
+            checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
+            checkForTime.Enabled = true;
+
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
+        }
+
+        private void NotifyServersEvent(object sender, ElapsedEventArgs e)
+        {
+            NotifyServers();
+        }
+
+        private void NotifyServers()
+        {
+            foreach(string serverId in releasesOfServers.Keys)
+            {
+                List<ReleaseView> releases = ReleaseService.Get(serverId);
+            }
+            foreach(Tuple<SocketCommandContext, List<ReleaseView>> entry in releasesOfServers.Values)
+            {
+                PrintReleases(entry.Item2, entry.Item1);
+            }
+        }
+
+        private void PrintReleases(List<ReleaseView> releases, SocketCommandContext context)
+        {
+            StringBuilder message = new StringBuilder();
+            message.Append(releases.Count).Append(" new releases were found").AppendLine();
+            foreach (ReleaseView release in releases)
+            {
+                message.Append("- ").Append(release.Name)
+                    .Append(" ").Append(release.Chapter)
+                    .Append(" (").Append(release.SourceURL).Append(")")
+                    .AppendLine();
+            }
+            context.Channel.SendMessageAsync(Beautify(message.ToString()));
+        }
+
+        private static string Beautify(string message)
+        {
+            return "```" + message + "```";
         }
 
         private async Task InitCommands()
@@ -125,6 +164,21 @@ namespace ReleaseBot
             {
                 // Create a Command Context.
                 var context = new SocketCommandContext(_client, msg);
+
+                //Not sure if updating context is needed. Needs testing
+                Tuple<SocketCommandContext, List<ReleaseView>> value;
+                var hasServer = releasesOfServers.TryGetValue("" + context.Guild.Id, out value);
+                if (hasServer)
+                {
+                    //update stored context
+                    value = new Tuple<SocketCommandContext, List<ReleaseView>>(context, value.Item2);
+                }
+                else
+                {
+                    value = new Tuple<SocketCommandContext, List<ReleaseView>>(context, new List<ReleaseView>());
+                }
+                releasesOfServers.Add("" + context.Guild.Id, value);
+
 
                 var result = await _commands.ExecuteAsync(context, pos);
 
