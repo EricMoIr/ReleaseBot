@@ -11,8 +11,13 @@ namespace Persistence.Domain
     public class ItemSubscription : DomainEntity
     {
         [Key]
-        public virtual int Id { get; set; }
+        public string SubscribeeName { get; set; }
+        [ForeignKey("SubscribeeName")]
         public User Subscribee { get; set; }
+
+        [Key]
+        public string ReleasableTitle { get; set; }
+        [ForeignKey("ReleasableTitle")]
         public Releasable Item { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Services.Domain;
 using System.Text;
 using Services;
+using System.Linq;
 
 namespace ReleaseBot
 {
@@ -85,9 +86,12 @@ namespace ReleaseBot
 
             return Task.CompletedTask;
         }
-        private double INTERVAL = 3600000; //one hour
-        Dictionary<string, Tuple<SocketCommandContext, List<ReleaseView>>> releasesOfServers
-            = new Dictionary<string, Tuple<SocketCommandContext, List<ReleaseView>>>();
+        //private double INTERVAL = 3600000; //one hour
+        private double INTERVAL = 60000; //1 minute
+        internal static Dictionary<string, SocketCommandContext> contexts
+            = new Dictionary<string, SocketCommandContext>();
+        internal static Dictionary<string, List<ReleaseView>> newReleases
+            = new Dictionary<string, List<ReleaseView>>();
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
@@ -97,8 +101,10 @@ namespace ReleaseBot
             await _client.LoginAsync(TokenType.Bot, "MjYyNzMxMzg4NjY1NDYyNzg1.DX48DQ.u6vJgafC628dfIWJ_3F8hWvBeuY");
             await _client.StartAsync();
 
+            //The backend eventually will start running independently of the bot
+            BackendRunner.RunBackend();
+
             System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
-            NotifyServers();
             checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
             checkForTime.Enabled = true;
 
@@ -113,13 +119,30 @@ namespace ReleaseBot
 
         private void NotifyServers()
         {
-            foreach(string serverId in releasesOfServers.Keys)
+            foreach (string serverId in contexts.Keys)
             {
-                List<ReleaseView> releases = ReleaseService.Get(serverId);
-            }
-            foreach(Tuple<SocketCommandContext, List<ReleaseView>> entry in releasesOfServers.Values)
-            {
-                PrintReleases(entry.Item2, entry.Item1);
+                List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId);
+                List<ReleaseView> newReleasesOfServer;
+                List<ReleaseView> toPrint = new List<ReleaseView>();
+                newReleases.TryGetValue(serverId, out newReleasesOfServer);
+                for(int i=0; i<releases.Count; i++)
+                {
+                    if (!newReleasesOfServer.Contains(releases[i])){
+                        ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
+                        if(release != null)
+                            release.Sources.AddRange(releases[i].Sources);
+                        else
+                            toPrint.Add(releases[i]);
+                    }
+                }
+                newReleasesOfServer.AddRange(toPrint);
+                newReleases.Remove(serverId);
+                newReleases.Add(serverId, newReleasesOfServer);
+                SocketCommandContext context = null;
+                if (contexts.TryGetValue(serverId, out context))
+                {
+                    PrintReleases(toPrint, context);
+                }
             }
         }
 
@@ -127,19 +150,21 @@ namespace ReleaseBot
         {
             StringBuilder message = new StringBuilder();
             message.Append(releases.Count).Append(" new releases were found").AppendLine();
+            int releaseNumber = 0;
             foreach (ReleaseView release in releases)
             {
-                message.Append("- ").Append(release.Name)
+                IEnumerable<string> sourceURLs = release.Sources.Select(x => x.URL);
+                StringBuilder inner = new StringBuilder();
+                inner.Append("- ").Append(release.Name)
                     .Append(" ").Append(release.Chapter)
-                    .Append(" (").Append(release.SourceURL).Append(")")
+                    .Append(" (").Append(string.Join(" ", sourceURLs)).Append(")")
                     .AppendLine();
+                if (ReleaseCommandModule.CanAddToMessage(message, inner) && releaseNumber++ < 15)
+                    message.Append(inner);
+                else
+                    break;
             }
-            context.Channel.SendMessageAsync(Beautify(message.ToString()));
-        }
-
-        private static string Beautify(string message)
-        {
-            return "```" + message + "```";
+            context.Channel.SendMessageAsync(ReleaseCommandModule.Beautify(message.ToString()));
         }
 
         private async Task InitCommands()
@@ -164,21 +189,6 @@ namespace ReleaseBot
             {
                 // Create a Command Context.
                 var context = new SocketCommandContext(_client, msg);
-
-                //Not sure if updating context is needed. Needs testing
-                Tuple<SocketCommandContext, List<ReleaseView>> value;
-                var hasServer = releasesOfServers.TryGetValue("" + context.Guild.Id, out value);
-                if (hasServer)
-                {
-                    //update stored context
-                    value = new Tuple<SocketCommandContext, List<ReleaseView>>(context, value.Item2);
-                }
-                else
-                {
-                    value = new Tuple<SocketCommandContext, List<ReleaseView>>(context, new List<ReleaseView>());
-                }
-                releasesOfServers.Add("" + context.Guild.Id, value);
-
 
                 var result = await _commands.ExecuteAsync(context, pos);
 

@@ -1,10 +1,8 @@
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Services.dll
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Services.pdb
-C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Backend.exe
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Persistence.dll
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\HtmlAgilityPack.dll
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\EntityFramework.dll
-C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Backend.pdb
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Persistence.pdb
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\HtmlAgilityPack.xml

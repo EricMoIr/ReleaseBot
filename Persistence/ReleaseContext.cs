@@ -9,13 +9,13 @@ namespace Persistence
     public class ReleaseContext : DbContext
     {
         public ReleaseContext() : base("name=ReleaseContext") { }
-        public DbSet<Release> ReleaseDates { get; }
-        public DbSet<Releasable> Releasables { get; }
-        public DbSet<SourceSubscription> SourceSubscriptions { get; }
-        public DbSet<ItemSubscription> ItemSubscriptions { get; }
-        public DbSet<User> Users { get; }
-        public DbSet<Source> Sources { get; }
-        public DbSet<DOM> DOMs { get; }
+        public DbSet<Release> ReleaseDates { get; set; }
+        public DbSet<Releasable> Releasables { get; set; }
+        public DbSet<SourceSubscription> SourceSubscriptions { get; set; }
+        public DbSet<ItemSubscription> ItemSubscriptions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Source> Sources { get; set; }
+        public DbSet<DOM> DOMs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -23,6 +23,10 @@ namespace Persistence
 
             modelBuilder.Entity<Release>()
                 .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL});
+            modelBuilder.Entity<ItemSubscription>()
+                .HasKey(i => new { i.ReleasableTitle, i.SubscribeeName });
+            modelBuilder.Entity<SourceSubscription>()
+                .HasKey(i => new { i.SourceURL, i.SubscribeeName });
         }
 
         public virtual EntityState GetState(object entity)

@@ -20,7 +20,8 @@ namespace Persistence.Domain
             }
         }
         //This is not against Liscow... There won't be a different behavior according to 
-        //the type. It's only used for filters of releasables
+        //the type. It's only used for filters of releasables (maybe? hereditance might be
+        //a thing later on)
         public string Type { get; set; }
         public Releasable()
         {

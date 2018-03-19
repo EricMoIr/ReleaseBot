@@ -12,13 +12,25 @@ namespace Services.Domain
 
         public ReleaseView(Release release)
         {
-            Name = release.Item.Title;
+            Name = release.ReleasableTitle;
             Chapter = release.Chapter;
-            SourceURL = release.SourceURL;
+            Sources = new List<SourceView>();
+            Sources.Add(new SourceView(release.SourceURL));
         }
 
         public string Name { get; set; }
         public double Chapter { get; set; }
-        public string SourceURL { get; set; }
+        public List<SourceView> Sources { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ReleaseView)
+            {
+                ReleaseView other = (ReleaseView)obj;
+                return other.Chapter == Chapter
+                    && other.Name == Name;
+            }
+            return false;
+        }
     }
 }

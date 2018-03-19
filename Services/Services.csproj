@@ -38,6 +38,10 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.7.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.7.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -51,6 +55,9 @@
   <ItemGroup>
     <Compile Include="BackendRunner.cs" />
     <Compile Include="Domain\ReleaseView.cs" />
+    <Compile Include="Domain\SourceView.cs" />
+    <Compile Include="ReleasableService.cs" />
+    <Compile Include="ReleaseFinder.cs" />
     <Compile Include="ReleaseService.cs" />
     <Compile Include="SourceService.cs" />
     <Compile Include="SubscriptionService.cs" />
@@ -58,10 +65,6 @@
     <Compile Include="UserService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Backend\Backend.csproj">
-      <Project>{e3e597aa-94f9-49e5-8e8a-9c97d196a951}</Project>
-      <Name>Backend</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Persistence\Persistence.csproj">
       <Project>{850a2983-7b67-427a-b8e8-a66f343dcf54}</Project>
       <Name>Persistence</Name>

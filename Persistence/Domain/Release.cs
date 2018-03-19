@@ -16,7 +16,9 @@ namespace Persistence.Domain
         public double Chapter { get; set; }
         [Key]
         public string SourceURL { get; set; }
+
         public DateTime Time { get; set; }
+
         [ForeignKey("ReleasableTitle")]
         public Releasable Item { get; set; }
         [ForeignKey("SourceURL")]

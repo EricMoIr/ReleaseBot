@@ -7,6 +7,7 @@ namespace Persistence.Domain
 {
     public class DOM : DomainEntity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public virtual int Id { get; set; }
         public string ClassAttribute { get; set; }

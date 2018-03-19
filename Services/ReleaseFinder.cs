@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Persistence.Domain;
 using System.Text.RegularExpressions;
 
-namespace Backend
+namespace Services
 {
-    public class ReleaseFinder
+    internal class ReleaseFinder
     {
         public ReleaseFinder()
         {

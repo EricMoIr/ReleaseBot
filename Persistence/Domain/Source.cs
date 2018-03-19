@@ -23,7 +23,7 @@ namespace Persistence.Domain
         {
             if(obj is Source)
             {
-                return ((Source)obj).URL.Equals(URL);
+                return URL.Equals(((Source)obj).URL);
             }
             return false;
         }

@@ -21,23 +21,38 @@ namespace Persistence.Migrations
 
         protected override void Seed(ReleaseContext context)
         {
-            User u = new User();
-            context.Users.AddOrUpdate(u);
-            context.Users.AddOrUpdate(u);
-            context.Users.AddOrUpdate(u);
-            context.Users.AddOrUpdate(u);
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            Source s1 = new Source()
+            {
+                URL = "https://animeflv.net",
+                ReleaseHolder = new DOM()
+                {
+                    Tag = "strong",
+                    ClassAttribute = "Title"
+                },
+                ChapterNumberHolder = new DOM()
+                {
+                    Tag = "span",
+                    ClassAttribute = "Capi"
+                }
+            };
+            Source s2 = new Source()
+            {
+                URL = "http://jkanime.net",
+                ReleaseHolder = new DOM()
+                {
+                    Tag = "a",
+                    ClassAttribute = "rated_title"
+                },
+                ChapterNumberHolder = new DOM()
+                {
+                    Tag = "span",
+                    ParentTag = "div",
+                    ParentClassAttribute = "rated_stars",
+                    ChildPosition = 1
+                }
+            };
+            context.Sources.AddOrUpdate(s1);
+            context.Sources.AddOrUpdate(s2);
         }
     }
 }
