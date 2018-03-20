@@ -35,31 +35,68 @@ namespace Services
             List<FoundRelease> foundReleases = new List<FoundRelease>();
             for (int i = 0; i < singleReleases.Count; i++)
             {
+                string[] releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i]);
                 FoundRelease release = new FoundRelease()
                 {
-                    Title = FindTitle(singleReleases[i]),
-                    Chapter = FindChapter(chapterNumbers[i])
+                    Title = releaseDetails[0],
+                    Chapter = double.Parse(releaseDetails[1])
                 };
                 foundReleases.Add(release);
             }
             return foundReleases;
         }
 
-        private static double FindChapter(HtmlNode htmlNode)
+        internal static string[] FindDetails(string releaseNode, HtmlNode chapterNode)
         {
-            string text = htmlNode.InnerText;
-            Regex regex = new Regex(@"\d+");
-            Match match = regex.Match(text);
-            if (match.Success)
+            string text = releaseNode.InnerText;
+            string[] ret = new string[2];
+            ret[1] = FindChapter(chapterNode.InnerText);
+            if (releaseNode.Equals(chapterNode))
             {
-                return double.Parse(match.Groups[match.Groups.Count - 1].Value);
+                int maxIndex = GetLastIndex(text, ret[1]);
+                ret[0] = text.Substring(0, maxIndex);
             }
-            throw new ArgumentException("The chapter number holder didn't held the chapter number");
+            else
+            {
+                ret[0] = FindTitle(releaseNode.InnerText);
+                ret[1] = FindChapter(chapterNode.InnerText);
+            }
+            return ret;
         }
 
-        private static string FindTitle(HtmlNode htmlNode)
+        private static int GetLastIndex(string text, string chapter)
         {
-            return htmlNode.InnerText;
+            //all these words should go into an array and/or be added with ML
+            text = text.ToLower();
+            int i = text.IndexOf("episode");
+            if (i > -1) return i;
+            i = text.IndexOf("chapter");
+            if (i > -1) return i;
+            i = text.IndexOf("episodio");
+            if (i > -1) return i;
+            i = text.IndexOf("capitulo");
+            if (i > -1) return i;
+            return text.LastIndexOf(chapter);
+        }
+
+        internal static string FindChapter(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "0";
+            Regex regex = new Regex(@"\d+");
+            Match match = regex.Match(text);
+            string chapter = "0";
+            while(match != null && match.Success)
+            {
+                chapter = match.Groups[match.Groups.Count - 1].Value;
+                match = match.NextMatch();
+            }
+            return chapter;
+        }
+
+        internal static string FindTitle(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "";
+            return text;
         }
     }
 }

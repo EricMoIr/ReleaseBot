@@ -56,3 +56,4 @@ C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\HtmlAgilityPack.xml
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Eric\Documents\ReleaseBot\ReleaseBot\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

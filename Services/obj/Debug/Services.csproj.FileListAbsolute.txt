@@ -13,3 +13,4 @@ C:\Users\Eric\Documents\ReleaseBot\Services\obj\Debug\Services.pdb
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Services.dll.config
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

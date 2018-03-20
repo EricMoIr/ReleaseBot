@@ -17,10 +17,7 @@ namespace Services
             .FirstOrDefault();
             if (releasable == null)
             {
-                releasable = new Releasable()
-                {
-                    Title = release.Title
-                };
+                releasable = new Releasable(release.Title);
                 releasables.Insert(releasable);
                 uow.Save();
             }

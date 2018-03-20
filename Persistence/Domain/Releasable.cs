@@ -28,6 +28,25 @@ namespace Persistence.Domain
             AlternativeTitles = new List<string>();
         }
 
+        public Releasable(string title)
+        {
+            Title = title;
+            AlternativeTitles = AlternativeTitlesFromTitle(title);
+        }
+
+        private List<string> AlternativeTitlesFromTitle(string title)
+        {
+            List<string> titles = new List<string>();
+            title = title.ToLower();
+            titles.Add(title);
+            titles.Add(title.Replace(" ", ""));
+            titles.Add(title.Replace(",", ""));
+            titles.Add(title.Replace(":", ""));
+            titles.Add(title.Replace(";", ""));
+            titles.Add(title.Replace("-", " "));
+            return titles;
+        }
+
         public bool HasTitle(string title)
         {
             return title.Equals(Title) || AlternativeTitles.Contains(title);

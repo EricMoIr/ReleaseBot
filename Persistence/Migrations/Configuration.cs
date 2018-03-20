@@ -51,8 +51,25 @@ namespace Persistence.Migrations
                     ChildPosition = 1
                 }
             };
+            Source s3 = new Source()
+            {
+                URL = "http://www.animerush.tv/",
+                ReleaseHolder = new DOM()
+                {
+                    Tag = "a",
+                    ParentTag = "h3",
+                    ChildPosition = 1
+                },
+                ChapterNumberHolder = new DOM()
+                {
+                    Tag = "a",
+                    ParentTag = "h3",
+                    ChildPosition = 1
+                }
+            };
             context.Sources.AddOrUpdate(s1);
             context.Sources.AddOrUpdate(s2);
+            context.Sources.AddOrUpdate(s3);
         }
     }
 }

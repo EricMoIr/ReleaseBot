@@ -30,7 +30,12 @@ namespace Persistence.Domain
             {
                 return "//" + Tag + "[@class='" + ClassAttribute + "']";
             }
-            return "//" + ParentTag + "[@class='" + ParentClassAttribute + "']"
+            if (!string.IsNullOrEmpty(ClassAttribute))
+            {
+                return "//" + ParentTag + "[@class='" + ParentClassAttribute + "']"
+                    + "/" + Tag + "[" + ChildPosition + "]";
+            }
+            return "//" + ParentTag
                 + "/" + Tag + "[" + ChildPosition + "]";
         }
     }
