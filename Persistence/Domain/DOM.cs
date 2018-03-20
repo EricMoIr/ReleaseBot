@@ -17,9 +17,11 @@ namespace Persistence.Domain
         //1-index
         public int ChildPosition { get; set; }
         public string ParentTag { get; set; }
+        public string XPath { get; set; }
 
         public string toXPATH()
         {
+            if (!string.IsNullOrEmpty(XPath)) return XPath;
             if (string.IsNullOrEmpty(Tag))
                 throw new ArgumentNullException("The tag cannot be null");
             if (!string.IsNullOrEmpty(IdAttribute))

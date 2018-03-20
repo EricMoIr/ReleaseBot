@@ -46,7 +46,7 @@ namespace Services
             return foundReleases;
         }
 
-        internal static string[] FindDetails(string releaseNode, HtmlNode chapterNode)
+        internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode)
         {
             string text = releaseNode.InnerText;
             string[] ret = new string[2];
@@ -54,7 +54,7 @@ namespace Services
             if (releaseNode.Equals(chapterNode))
             {
                 int maxIndex = GetLastIndex(text, ret[1]);
-                ret[0] = text.Substring(0, maxIndex);
+                ret[0] = text.Substring(0, maxIndex).Trim();
             }
             else
             {
@@ -90,13 +90,13 @@ namespace Services
                 chapter = match.Groups[match.Groups.Count - 1].Value;
                 match = match.NextMatch();
             }
-            return chapter;
+            return chapter.Trim();
         }
 
         internal static string FindTitle(string text)
         {
             if (string.IsNullOrEmpty(text)) return "";
-            return text;
+            return text.Trim();
         }
     }
 }

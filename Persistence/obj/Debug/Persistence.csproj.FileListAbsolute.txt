@@ -13,3 +13,14 @@ C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServ
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll.config
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.pdb
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.dll
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.xml
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
+C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
