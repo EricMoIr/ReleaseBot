@@ -64,6 +64,10 @@
     <Compile Include="Domain\Source.cs" />
     <Compile Include="Domain\ItemSubscription.cs" />
     <Compile Include="Domain\User.cs" />
+    <Compile Include="Migrations\201803201942219_XPath-on-DOM.cs" />
+    <Compile Include="Migrations\201803201942219_XPath-on-DOM.Designer.cs">
+      <DependentUpon>201803201942219_XPath-on-DOM.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseContext.cs" />
@@ -75,6 +79,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803201942219_XPath-on-DOM.resx">
+      <DependentUpon>201803201942219_XPath-on-DOM.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

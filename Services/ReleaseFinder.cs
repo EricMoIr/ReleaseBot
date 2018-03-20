@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using Persistence.Domain;
 using System.Text.RegularExpressions;
+using System.Text;
+using System.Linq;
 
 namespace Services
 {
@@ -20,6 +22,12 @@ namespace Services
             string chapterNumberXPATH = source.ChapterNumberHolder.toXPATH();
             HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(releaseXPATH);
             HtmlNodeCollection chapterNumbers = htmlDoc.DocumentNode.SelectNodes(chapterNumberXPATH);
+            List<string> a = new List<string>();
+            List<string> b = new List<string>();
+            foreach (HtmlNode asd in singleReleases)
+                a.Add(asd.InnerText);
+            foreach (HtmlNode asd in chapterNumbers)
+                b.Add(asd.InnerText);
             if (singleReleases == null)
             {
                 Console.WriteLine("The following XPATH for release holder is not valid or no releases were made: \n"
@@ -36,30 +44,39 @@ namespace Services
             for (int i = 0; i < singleReleases.Count; i++)
             {
                 string[] releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i]);
-                FoundRelease release = new FoundRelease()
+                try
                 {
-                    Title = releaseDetails[0],
-                    Chapter = double.Parse(releaseDetails[1])
-                };
-                foundReleases.Add(release);
+                    FoundRelease release = new FoundRelease()
+                    {
+                        Title = releaseDetails[0],
+                        Chapter = double.Parse(releaseDetails[1])
+                    };
+                    foundReleases.Add(release);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("FUCK "+string.Join("_",releaseDetails));
+                }
             }
             return foundReleases;
         }
 
         internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode)
         {
-            string text = releaseNode.InnerText;
             string[] ret = new string[2];
-            ret[1] = FindChapter(chapterNode.InnerText);
+            ret[1] = FindChapter(chapterNode.InnerText.Trim());
             if (releaseNode.Equals(chapterNode))
             {
+                string text = releaseNode.InnerText.Trim();
                 int maxIndex = GetLastIndex(text, ret[1]);
-                ret[0] = text.Substring(0, maxIndex).Trim();
+                if (maxIndex == -1)
+                    ret[0] = text;
+                else
+                    ret[0] = text.Substring(0, maxIndex).Trim();
             }
             else
             {
-                ret[0] = FindTitle(releaseNode.InnerText);
-                ret[1] = FindChapter(chapterNode.InnerText);
+                ret[0] = FindTitle(releaseNode.InnerText.Trim());
             }
             return ret;
         }
@@ -79,21 +96,47 @@ namespace Services
             return text.LastIndexOf(chapter);
         }
 
-        internal static string FindChapter(string text)
+        private static string FindChapter(string text)
         {
             if (string.IsNullOrEmpty(text)) return "0";
-            Regex regex = new Regex(@"\d+");
-            Match match = regex.Match(text);
-            string chapter = "0";
-            while(match != null && match.Success)
+            string chapter = GetLastDigits(text);
+            int index = text.LastIndexOf(chapter);
+            if (index < 2)
+                return chapter;
+            if (char.IsDigit(text[index - 2]) &&
+                (text[index - 1] == '.' || text[index - 1] == ','))
             {
-                chapter = match.Groups[match.Groups.Count - 1].Value;
-                match = match.NextMatch();
+                string sub = text.Substring(0, index - 1);
+                string decimals = GetLastDigits(sub);
+                if(decimals.Length > 0)
+                    return decimals + "." + chapter;
+                return chapter;
             }
-            return chapter.Trim();
+            return chapter;
         }
 
-        internal static string FindTitle(string text)
+        private static string GetLastDigits(string text)
+        {
+            StringBuilder chapterBuilder = new StringBuilder();
+            List<char> digits = new List<char>();
+            for (int i = text.Length - 1; i > -1; i--)
+            {
+                if (char.IsDigit(text[i]))
+                    digits.Add(text[i]);
+                else if (text[i] == ' ' || text[i] == ':')
+                    continue;
+                else
+                    break;
+            }
+            if (digits.Count == 0) return "0";
+            foreach (char digit in Enumerable.Reverse(digits))
+            {
+                chapterBuilder.Append(digit);
+            }
+            return chapterBuilder.ToString();
+        }
+
+        private static string FindTitle(string text)
         {
             if (string.IsNullOrEmpty(text)) return "";
             return text.Trim();

@@ -21,55 +21,80 @@ namespace Persistence.Migrations
 
         protected override void Seed(ReleaseContext context)
         {
+            DOM d1 = new DOM()
+            {
+                Id = 1,
+                Tag = "strong",
+                ClassAttribute = "Title",
+                XPath = @"//strong[@class='Title']"
+            };
+            DOM d2 = new DOM()
+            {
+                Id = 2,
+                Tag = "span",
+                ClassAttribute = "Capi",
+                XPath = @"//span[@class='Capi']"
+            };
+            DOM d3 = new DOM()
+            {
+                Id = 3,
+                Tag = "a",
+                ClassAttribute = "rated_title",
+                XPath = @"//a[@class='rated_title']"
+            };
+            DOM d4 = new DOM()
+            {
+                Id = 4,
+                Tag = "span",
+                ParentTag = "div",
+                ParentClassAttribute = "rated_stars",
+                ChildPosition = 1,
+                XPath = @"//div[@class='rated_stars']/span[1]"
+            };
+            DOM d5 = new DOM()
+            {
+                Id = 5,
+                Tag = "a",
+                ParentTag = "h3",
+                ChildPosition = 1,
+                XPath = @"//h3/a"
+            };
+            DOM d6 = new DOM()
+            {
+                Id = 6,
+                Tag = "a",
+                ParentTag = "h3",
+                ChildPosition = 1,
+                XPath = @"//h3/a"
+            };
             Source s1 = new Source()
             {
                 URL = "https://animeflv.net",
-                ReleaseHolder = new DOM()
-                {
-                    Tag = "strong",
-                    ClassAttribute = "Title"
-                },
-                ChapterNumberHolder = new DOM()
-                {
-                    Tag = "span",
-                    ClassAttribute = "Capi"
-                }
+                ReleaseHolder = d1,
+                ChapterNumberHolder = d2
             };
             Source s2 = new Source()
             {
                 URL = "http://jkanime.net",
-                ReleaseHolder = new DOM()
-                {
-                    Tag = "a",
-                    ClassAttribute = "rated_title"
-                },
-                ChapterNumberHolder = new DOM()
-                {
-                    Tag = "span",
-                    ParentTag = "div",
-                    ParentClassAttribute = "rated_stars",
-                    ChildPosition = 1
-                }
+                ReleaseHolder = d3,
+                ChapterNumberHolder = d4
             };
             Source s3 = new Source()
             {
                 URL = "http://www.animerush.tv/",
-                ReleaseHolder = new DOM()
-                {
-                    Tag = "a",
-                    ParentTag = "h3",
-                    ChildPosition = 1
-                },
-                ChapterNumberHolder = new DOM()
-                {
-                    Tag = "a",
-                    ParentTag = "h3",
-                    ChildPosition = 1
-                }
+                ReleaseHolder = d5,
+                ChapterNumberHolder = d6
             };
+            context.DOMs.AddOrUpdate(d1);
+            context.DOMs.AddOrUpdate(d2);
+            context.DOMs.AddOrUpdate(d3);
+            context.DOMs.AddOrUpdate(d4);
+            context.DOMs.AddOrUpdate(d5);
+            context.DOMs.AddOrUpdate(d6);
             context.Sources.AddOrUpdate(s1);
             context.Sources.AddOrUpdate(s2);
             context.Sources.AddOrUpdate(s3);
+            context.SaveChanges();
         }
     }
 }
