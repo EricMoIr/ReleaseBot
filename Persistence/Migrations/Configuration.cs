@@ -23,28 +23,24 @@ namespace Persistence.Migrations
         {
             DOM d1 = new DOM()
             {
-                Id = 1,
                 Tag = "strong",
                 ClassAttribute = "Title",
                 XPath = @"//strong[@class='Title']"
             };
             DOM d2 = new DOM()
             {
-                Id = 2,
                 Tag = "span",
                 ClassAttribute = "Capi",
                 XPath = @"//span[@class='Capi']"
             };
             DOM d3 = new DOM()
             {
-                Id = 3,
                 Tag = "a",
                 ClassAttribute = "rated_title",
                 XPath = @"//a[@class='rated_title']"
             };
             DOM d4 = new DOM()
             {
-                Id = 4,
                 Tag = "span",
                 ParentTag = "div",
                 ParentClassAttribute = "rated_stars",
@@ -53,7 +49,6 @@ namespace Persistence.Migrations
             };
             DOM d5 = new DOM()
             {
-                Id = 5,
                 Tag = "a",
                 ParentTag = "h3",
                 ChildPosition = 1,
@@ -61,11 +56,18 @@ namespace Persistence.Migrations
             };
             DOM d6 = new DOM()
             {
-                Id = 6,
                 Tag = "a",
                 ParentTag = "h3",
                 ChildPosition = 1,
                 XPath = @"//h3/a"
+            };
+            DOM d7 = new DOM()
+            {
+                XPath = "//a[@title='See all releases for this show']"
+            };
+            DOM d8 = new DOM()
+            {
+                XPath = "//td[@class='rls-label']"
             };
             Source s1 = new Source()
             {
@@ -85,15 +87,24 @@ namespace Persistence.Migrations
                 ReleaseHolder = d5,
                 ChapterNumberHolder = d6
             };
-            context.DOMs.AddOrUpdate(d1);
+            Source s4 = new Source()
+            {
+                URL = "http://horriblesubs.info/lib/latest.php",
+                ReleaseHolder = d7,
+                ChapterNumberHolder = d8
+            };
+            /*context.DOMs.AddOrUpdate(d1);
             context.DOMs.AddOrUpdate(d2);
             context.DOMs.AddOrUpdate(d3);
             context.DOMs.AddOrUpdate(d4);
             context.DOMs.AddOrUpdate(d5);
             context.DOMs.AddOrUpdate(d6);
+            context.DOMs.AddOrUpdate(d7);
+            context.DOMs.AddOrUpdate(d8);*/
             context.Sources.AddOrUpdate(s1);
             context.Sources.AddOrUpdate(s2);
             context.Sources.AddOrUpdate(s3);
+            context.Sources.AddOrUpdate(s4);
             context.SaveChanges();
         }
     }

@@ -22,12 +22,6 @@ namespace Services
             string chapterNumberXPATH = source.ChapterNumberHolder.toXPATH();
             HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(releaseXPATH);
             HtmlNodeCollection chapterNumbers = htmlDoc.DocumentNode.SelectNodes(chapterNumberXPATH);
-            List<string> a = new List<string>();
-            List<string> b = new List<string>();
-            foreach (HtmlNode asd in singleReleases)
-                a.Add(asd.InnerText);
-            foreach (HtmlNode asd in chapterNumbers)
-                b.Add(asd.InnerText);
             if (singleReleases == null)
             {
                 Console.WriteLine("The following XPATH for release holder is not valid or no releases were made: \n"
