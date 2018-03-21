@@ -32,3 +32,12 @@ C:\Users\Usuario\Documents\ReleaseBot\Services\obj\Debug\Services.csprojResolveA
 C:\Users\Usuario\Documents\ReleaseBot\Services\obj\Debug\Services.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\Documents\ReleaseBot\Services\obj\Debug\Services.dll
 C:\Users\Usuario\Documents\ReleaseBot\Services\obj\Debug\Services.pdb
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Castle.Core.dll
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Moq.dll
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\System.ValueTuple.dll
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Castle.Core.xml
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Moq.pdb
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\Moq.xml
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Eric\Documents\ReleaseBot\Services\bin\Debug\System.ValueTuple.xml

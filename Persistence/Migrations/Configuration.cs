@@ -69,6 +69,14 @@ namespace Persistence.Migrations
             {
                 XPath = "//td[@class='rls-label']"
             };
+            DOM d9 = new DOM()
+            {
+                XPath = "//a[@class='chapter']"
+            };
+            DOM d10 = new DOM()
+            {
+                XPath = "//a[@class='chapter']"
+            };
             Source s1 = new Source()
             {
                 URL = "https://animeflv.net",
@@ -93,6 +101,12 @@ namespace Persistence.Migrations
                 ReleaseHolder = d7,
                 ChapterNumberHolder = d8
             };
+            Source s5 = new Source()
+            {
+                URL = "http://fanfox.net",
+                ReleaseHolder = d9,
+                ChapterNumberHolder = d10
+            };
             /*context.DOMs.AddOrUpdate(d1);
             context.DOMs.AddOrUpdate(d2);
             context.DOMs.AddOrUpdate(d3);
@@ -105,6 +119,7 @@ namespace Persistence.Migrations
             context.Sources.AddOrUpdate(s2);
             context.Sources.AddOrUpdate(s3);
             context.Sources.AddOrUpdate(s4);
+            context.Sources.AddOrUpdate(s5);
             context.SaveChanges();
         }
     }

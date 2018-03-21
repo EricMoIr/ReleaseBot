@@ -29,11 +29,6 @@ namespace Persistence
             DOMs = new ReleaseRepository<DOM>(context);
         }
 
-        public ReleaseUnitOfWork(ReleaseContext releaseContext)
-        {
-            context = releaseContext;
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)

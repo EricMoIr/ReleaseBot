@@ -10,7 +10,8 @@ namespace Persistence.Domain
         [Key]
         public virtual string Title { get; set; }
         public List<string> AlternativeTitles { get; set; }
-        public string AlternativeTitlesAsString { get
+        public string AlternativeTitlesAsString {
+            get
             {
                 return string.Join("^", AlternativeTitles);
             }
@@ -47,9 +48,14 @@ namespace Persistence.Domain
             return titles;
         }
 
-        public bool HasTitle(string title)
+        public override bool Equals(object other)
         {
-            return title.Equals(Title) || AlternativeTitles.Contains(title);
+            if(other is Releasable)
+            {
+                Releasable obj = (Releasable)other;
+                return Title.Equals(obj.Title) || AlternativeTitles.Contains(obj.Title);
+            }
+            return false;
         }
     }
 }
