@@ -57,26 +57,40 @@ namespace ReleaseBot
             else
             {
                 await ReplyAsync(Beautify("You must choose one of the pre-existing sources"));
-                await PrintSources();
+                await PrintSources("");
             }
         }
         //Categories should be a thing later on
         [Command("sources")]
-        [Summary("Prints all available sources.")]
-        public async Task PrintSources()
+        [Summary("Prints available sources. Use: '.sources all' or '.sources <category>'")]
+        public async Task PrintSources(string arg = "")
         {
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.Title = "Sources";
             List<SourceView> sources = SourceService.GetAllViews();
-            StringBuilder message = new StringBuilder();
-            foreach (SourceView source in sources)
+            var sourcesByCategory = sources.GroupBy(x => x.Category);
+            foreach(var categoryGroup in sourcesByCategory)
             {
-                StringBuilder inner = new StringBuilder()
-                    .Append("- ").Append(source.URL).Append("\n");
-                if (CanAddToMessage(message, inner))
-                    message.Append(inner);
-                else
-                    break;
+                string category = categoryGroup.Key;
+                if (arg != "" && arg != category) continue;
+                StringBuilder sb = new StringBuilder();
+                foreach (var source in categoryGroup)
+                {
+                    sb.AppendLine("- " + source.URL);
+                }
+                builder.AddField(f =>
+                {
+                    f.Name = category;
+                    f.Value = sb.ToString();
+                });
             }
-            await ReplyAsync(Beautify(message.ToString()));
+            if(builder.Fields.Count == 0)
+                builder.AddField(f =>
+                {
+                    f.Name = "Wrong category";
+                    f.Value = "The category used as parameters doesn't exist";
+                });
+            await ReplyAsync("", embed: builder.Build());
         }
         
         [Command("releases")]

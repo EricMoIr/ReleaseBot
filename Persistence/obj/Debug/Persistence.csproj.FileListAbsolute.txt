@@ -26,3 +26,4 @@ C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.XPathonDOM.resources
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.GenerateResource.Cache
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Addedcategoryfieldatsources.resources

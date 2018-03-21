@@ -19,8 +19,10 @@ namespace Services.Domain
             int firstSlash = source.URL.Substring(8).IndexOf("/") + 8;
             if (firstSlash == 7) firstSlash = source.URL.Length;
             URL = "<" + source.URL.Substring(0, firstSlash) + ">";
+            Category = source.Category;
         }
 
         public string URL { get; set; }
+        public string Category { get; set; }
     }
 }
