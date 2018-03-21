@@ -10,9 +10,10 @@ namespace Services
     public class BackendRunner
     {
         private static bool isRunning = false;
-
-        public static void RunBackend()
+        private static double INTERVAL;
+        public static void RunBackend(double interval)
         {
+            INTERVAL = interval;
             if (!isRunning)
             {
                 LookForReleases();

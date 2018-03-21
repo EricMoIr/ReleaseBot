@@ -44,13 +44,13 @@ namespace Services
             return true;
         }
 
-        public static List<ReleaseView> GetNewReleasesOfServer(string serverId)
+        public static List<ReleaseView> GetNewReleasesOfServer(string serverId, double milliseconds)
         {
             //Actually, I only need one column, not everything. I need to look into this
             List<SourceSubscription> sourcesSubscribedTo =
                 sourcesSub.Get(x => x.SubscribeeName == serverId).ToList();
             List<ReleaseView> releasesSubscribedTo = new List<ReleaseView>();
-            DateTime oldestTime = DateTime.Now.AddHours(-1);
+            DateTime oldestTime = DateTime.Now.AddMilliseconds(-milliseconds);
             foreach (SourceSubscription sourceSub in sourcesSubscribedTo)
             {
                 releasesSubscribedTo.AddRange(

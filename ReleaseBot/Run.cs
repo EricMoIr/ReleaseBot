@@ -87,8 +87,7 @@ namespace ReleaseBot
 
             return Task.CompletedTask;
         }
-        //private double INTERVAL = 3600000; //one hour
-        private double INTERVAL = 60000; //1 minute
+        private static double INTERVAL = 3600000; //one hour
         internal static Dictionary<string, SocketCommandContext> contexts
             = new Dictionary<string, SocketCommandContext>();
         internal static Dictionary<string, List<ReleaseView>> newReleases
@@ -103,7 +102,7 @@ namespace ReleaseBot
             await _client.StartAsync();
 
             //The backend eventually will start running independently of the bot
-            BackendRunner.RunBackend();
+            BackendRunner.RunBackend(INTERVAL);
 
             System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
             checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
@@ -122,32 +121,36 @@ namespace ReleaseBot
         {
             foreach (string serverId in contexts.Keys)
             {
-                List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId);
-                List<ReleaseView> newReleasesOfServer;
-                List<ReleaseView> toPrint = new List<ReleaseView>();
-                newReleases.TryGetValue(serverId, out newReleasesOfServer);
-                for(int i=0; i<releases.Count; i++)
-                {
-                    if (!newReleasesOfServer.Contains(releases[i])){
-                        ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
-                        if(release != null)
-                            release.Sources.AddRange(releases[i].Sources);
-                        else
-                            toPrint.Add(releases[i]);
-                    }
-                }
-                newReleasesOfServer.AddRange(toPrint);
-                newReleases.Remove(serverId);
-                newReleases.Add(serverId, newReleasesOfServer);
-                SocketCommandContext context = null;
+                SocketCommandContext context;
                 if (contexts.TryGetValue(serverId, out context))
-                {
-                    PrintReleases(toPrint, context);
-                }
+                    NotifyServer(context);
             }
         }
+        internal static async Task NotifyServer(SocketCommandContext context)
+        {
+            string serverId = "" + context.Guild.Id;
+            List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, INTERVAL);
+            List<ReleaseView> newReleasesOfServer;
+            List<ReleaseView> toPrint = new List<ReleaseView>();
+            newReleases.TryGetValue(serverId, out newReleasesOfServer);
+            for (int i = 0; i < releases.Count; i++)
+            {
+                if (!newReleasesOfServer.Contains(releases[i]))
+                {
+                    ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
+                    if (release != null)
+                        release.Sources.AddRange(releases[i].Sources);
+                    else
+                        toPrint.Add(releases[i]);
+                }
+            }
+            newReleasesOfServer.AddRange(toPrint);
+            newReleases.Remove(serverId);
+            newReleases.Add(serverId, newReleasesOfServer);
+            await PrintReleases(toPrint, context);
+        }
 
-        private void PrintReleases(List<ReleaseView> releases, SocketCommandContext context)
+        private static async Task PrintReleases(List<ReleaseView> releases, SocketCommandContext context)
         {
             StringBuilder message = new StringBuilder();
             message.Append(releases.Count).Append(" new releases were found").AppendLine();
@@ -165,7 +168,7 @@ namespace ReleaseBot
                 else
                     break;
             }
-            context.Channel.SendMessageAsync(ReleaseCommandModule.Beautify(message.ToString()));
+            await context.Channel.SendMessageAsync(ReleaseCommandModule.Beautify(message.ToString()));
         }
 
         private async Task InitCommands()

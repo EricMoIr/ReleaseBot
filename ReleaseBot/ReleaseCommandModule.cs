@@ -69,7 +69,7 @@ namespace ReleaseBot
         {
             List<SourceView> sources = SourceService.GetAllViews();
             StringBuilder message = new StringBuilder();
-            foreach(SourceView source in sources)
+            foreach (SourceView source in sources)
             {
                 StringBuilder inner = new StringBuilder()
                     .Append("- ").Append(source.URL).Append("\n");
@@ -79,6 +79,13 @@ namespace ReleaseBot
                     break;
             }
             await ReplyAsync(Beautify(message.ToString()));
+        }
+        
+        [Command("releases")]
+        [Summary("Prints the last found releases.")]
+        public async Task PrintReleases()
+        {
+            await Run.NotifyServer(Context);
         }
 
         internal static bool CanAddToMessage(StringBuilder message, StringBuilder inner)
