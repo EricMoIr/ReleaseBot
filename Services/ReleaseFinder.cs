@@ -69,16 +69,23 @@ namespace Services
             {
                 string text = releaseNode.InnerText.Trim();
                 int maxIndex = GetLastIndex(text, ret[1]);
-                if (maxIndex == -1)
-                    ret[0] = text;
+                if (maxIndex == -1) //Doesn't have chapter
+                    ret[0] = RemoveSeparator(text);
                 else
-                    ret[0] = text.Substring(0, maxIndex).Trim();
+                    ret[0] = RemoveSeparator(text.Substring(0, maxIndex).Trim());
             }
             else
             {
                 ret[0] = FindTitle(releaseNode.InnerText.Trim());
             }
             return ret;
+        }
+
+        private static string RemoveSeparator(string text)
+        {
+            if (text[text.Length-1] == ':' || text[text.Length-1] == '-')
+                text = text.Substring(0, text.Length - 1);
+            return text.Trim();
         }
 
         private static int GetLastIndex(string text, string chapter)

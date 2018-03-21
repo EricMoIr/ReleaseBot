@@ -16,11 +16,13 @@ namespace Services
         //I "should" test GetReleases as a whole, but since it loads a webpage... 
         //it doesn't fit FIRST so it's not a valid unit test
         //and even if it did, I'd eventually get booted by the sources' servers
-        
+
+        private static string PATH = Path.Combine(Directory.GetCurrentDirectory(), @"..\..");
+
         [TestMethod]
         public void FindDetailsSameParent()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb1.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb1.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -35,7 +37,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsDifferentParent()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb2.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb2.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -50,7 +52,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentWithDivider()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb3.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb3.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -65,7 +67,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentWithDividerTitleHasNumbers()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb4.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb4.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -80,7 +82,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentChapterHasDecimals()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb5.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb5.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -95,7 +97,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsDifferentParentChapterHasDecimals()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb6.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb6.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -110,7 +112,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentWithDividerChapterHasDecimals()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb7.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb7.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -125,7 +127,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentWithDividerTitleHasNumbersChapterHasDecimals()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb8.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb8.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -140,7 +142,7 @@ namespace Services
         [TestMethod]
         public void FindDetailsSameParentMovie()
         {
-            string text = File.ReadAllText(Directory.GetCurrentDirectory() + @"\TestWeb9.html");
+            string text = File.ReadAllText(PATH + @"\TestWeb9.html");
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(text);
             string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
@@ -149,6 +151,21 @@ namespace Services
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
             string[] details = new string[] { "Movie Name", "0" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            CollectionAssert.AreEqual(details, result);
+        }
+        [TestMethod]
+        public void FindDetailsSameParentChapterWithDivider()
+        {
+            string text = File.ReadAllText(PATH + @"\TestWeb10.html");
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(text);
+            string xpathRelease = @"//div[@class='parent']/div[1]/div[1]/div[1]";
+            string xpathEpisode = @"//div[@class='parent']/div[1]/div[1]/div[1]";
+            HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
+            HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
+
+            string[] details = new string[] { "Name", "10" };
             string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
             CollectionAssert.AreEqual(details, result);
         }

@@ -10,6 +10,7 @@ using Services.Domain;
 using System.Text;
 using Services;
 using System.Linq;
+using System.Configuration;
 
 namespace ReleaseBot
 {
@@ -98,7 +99,7 @@ namespace ReleaseBot
             await InitCommands();
 
             // Login and connect.
-            await _client.LoginAsync(TokenType.Bot, "MjYyNzMxMzg4NjY1NDYyNzg1.DX48DQ.u6vJgafC628dfIWJ_3F8hWvBeuY");
+            await _client.LoginAsync(TokenType.Bot, ConfigurationManager.AppSettings["BotToken"]);
             await _client.StartAsync();
 
             //The backend eventually will start running independently of the bot
