@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelpCommandModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseCommandModule.cs" />
     <Compile Include="Run.cs" />

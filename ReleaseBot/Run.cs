@@ -175,6 +175,9 @@ namespace ReleaseBot
         {
             // Subscribe a handler to see if a message invokes a command.
             await _commands.AddModuleAsync<ReleaseCommandModule>();
+            await _commands.AddModuleAsync<HelpCommandModule>();
+            HelpCommandModule._commands = _commands;
+
             _client.MessageReceived += HandleCommandAsync;
         }
 

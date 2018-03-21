@@ -17,7 +17,16 @@ namespace Services
         public static List<FoundRelease> GetReleases(Source source)
         {
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument htmlDoc = web.Load(source.URL);
+            HtmlDocument htmlDoc = null;
+            try
+            {
+                htmlDoc = web.Load(source.URL);
+            }
+            catch(System.Net.WebException e)
+            {
+                Console.WriteLine(e.Message);
+                return new List<FoundRelease>();
+            }
             string releaseXPATH = source.ReleaseHolder.toXPATH();
             string chapterNumberXPATH = source.ChapterNumberHolder.toXPATH();
             HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(releaseXPATH);

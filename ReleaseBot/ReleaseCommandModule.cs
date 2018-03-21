@@ -16,7 +16,6 @@ namespace ReleaseBot
     {
         //Esta clase se llama desde cada servidor, es decir, si la llamo desde el server A,
         //el contexto es diferente de si la llamo desde el server B
-        
         // ~say hello -> hello
         [Command("setchannel")]
         [Summary("Sets this channel as the one to print notifications.")]
@@ -36,22 +35,22 @@ namespace ReleaseBot
             await ReplyAsync(Beautify("The channel <#" + Context.Channel.Id+"> was set for notifications"));
         }
         [Command("sub")]
-        [Summary("Starts notifying when new releases subscribed pop.")]
+        [Summary("Starts notifying when new releases subscribed pop. Use: '.sub all' or '.sub <source>'")]
         public async Task SubscribeToAll(string arg)
         {
             if (arg == null)
             {
-                await ReplyAsync(Beautify(".sub all or .sub <source>"));
+                ReplyAsync(Beautify(".sub all or .sub <source>"));
             }
             else if(arg == "all")
             {
-                await ReplyAsync(Beautify("Subscribing to all sources...\n" +
+                ReplyAsync(Beautify("Subscribing to all sources...\n" +
                     "You will receive a message every hour notifying about the sources you are subscribed to"));
                 SubscriptionService.SubscribeToAllSources("" + Context.Guild.Id);
             }
             else if(SourceService.IsValidSource(arg))
             {
-                await ReplyAsync(Beautify("Subscribing to "+arg+"\n" +
+                ReplyAsync(Beautify("Subscribing to "+arg+"\n" +
                     "You will receive a message every hour notifying about the sources you are subscribed to"));
                 SubscriptionService.SubscribeToSource("" + Context.Guild.Id, arg);
             }
@@ -61,7 +60,6 @@ namespace ReleaseBot
                 await PrintSources();
             }
         }
-
         //Categories should be a thing later on
         [Command("sources")]
         [Summary("Prints all available sources.")]
