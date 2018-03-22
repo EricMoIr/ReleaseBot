@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Services
 {
@@ -16,10 +17,18 @@ namespace Services
             INTERVAL = interval;
             if (!isRunning)
             {
+                Timer checkForTime = new Timer(INTERVAL);
+                checkForTime.Elapsed += new ElapsedEventHandler(LookForReleasesEvent);
                 LookForReleases();
             }
             isRunning = true;
         }
+
+        private static void LookForReleasesEvent(object sender, ElapsedEventArgs e)
+        {
+            LookForReleases();
+        }
+
         private static DateTime time;
         private static void LookForReleases()
         {

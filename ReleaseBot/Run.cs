@@ -52,13 +52,23 @@ namespace ReleaseBot
                 LogLevel = LogSeverity.Info,
                 CaseSensitiveCommands = false,
             });
-
-            // Subscribe the logging handler to both the client and the CommandService.
+            
             _client.Log += Log;
             _commands.Log += Log;
+            
+            _client.JoinedGuild += JoinedNewGuild;
 
-            // Setup your DI container.
+        }
 
+        private Task JoinedNewGuild(SocketGuild arg)
+        {
+            string message = "Thank you for adding <@" + _client.CurrentUser.Id + "> to your server!";
+            message += "\nThe best solution for subscribing to sites' publications :D";
+            message += "\nTo set in which channel you wish to receive the notifications, enter '.setchannel' at that channel";
+            message += "\nFor a detailed information concerning the commands, enter '.help'";
+            message += "\nEnjoy! :D";
+            arg.DefaultChannel.SendMessageAsync(message);
+            return Task.CompletedTask;
         }
 
         // Example of a logging handler. This can be re-used by addons
