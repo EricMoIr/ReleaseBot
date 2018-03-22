@@ -19,16 +19,23 @@ namespace Services
             return sources.Get(null, orderBy, includeProperties);
         }
 
-        public static bool IsValidSource(string source)
+        private static List<string> sourceURLs = new List<string>();
+        public static bool IsValidSource(ref string arg)
         {
-            //Regex r = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
-            //if (!r.IsMatch(source)) return false;
-            IEnumerable<Source> sources = GetAll();
-            Source s = new Source()
+            arg = arg.Trim().ToLower();
+            if (sourceURLs.Count == 0)
             {
-                URL = source
-            };
-            return sources.Contains(s);
+                sourceURLs = sources.Get().Select(x => x.URL).OrderBy(x => x).ToList();
+            }
+            foreach (string sourceURL in sourceURLs)
+            {
+                if (sourceURL.ToLower().IndexOf(arg) > -1)
+                {
+                    arg = sourceURL;
+                    return true;
+                }
+            }
+            return false;
         }
         private static List<SourceView> sourceViews = new List<SourceView>();
         public static List<SourceView> GetAllViews()
@@ -40,6 +47,24 @@ namespace Services
                     sourceViews.Add(new SourceView(s));
             }
             return sourceViews;
+        }
+        private static List<string> categories = new List<string>();
+        public static bool IsValidCategory(ref string arg)
+        {
+            arg = arg.Trim().ToLower();
+            if (categories.Count == 0)
+            {
+                categories = sources.Get().Select(x => x.Category).Distinct().OrderBy(x => x).ToList();
+            }
+            foreach(string category in categories)
+            {
+                if (category.ToLower().IndexOf(arg) > -1)
+                {
+                    arg = category;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

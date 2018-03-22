@@ -18,10 +18,10 @@ namespace Services
             IEnumerable<Source> sources = SourceService.GetAll();
             foreach(Source source in sources)
             {
-                CreateSubscription(source.URL, user.Name);
+                SubscribeToSource(source.URL, user.Name);
             }
         }
-        private static void CreateSubscription(string sourceURL, string userName)
+        public static void SubscribeToSource(string sourceURL, string userName)
         {
             SourceSubscription sub =
                 sourceSubscriptions
@@ -36,13 +36,17 @@ namespace Services
                     SubscribeeName = userName
                 };
                 sourceSubscriptions.Insert(sub);
+                uow.Save();
             }
-            uow.Save();
         }
 
-        public static void SubscribeToSource(string v1, string v2)
+        public static void SubscribeToCategory(string userName, string category)
         {
-            throw new NotImplementedException();
+            var sources = uow.Sources.Get(x => x.Category == category);
+            foreach(Source source in sources)
+            {
+                SubscribeToSource(source.URL, userName);
+            }
         }
     }
 }

@@ -11,7 +11,9 @@ namespace Services.Domain
     {
         public SourceView(string sourceURL)
         {
-            URL = "<" + sourceURL + ">";
+            int firstSlash = sourceURL.Substring(8).IndexOf("/") + 8;
+            if (firstSlash == 7) firstSlash = sourceURL.Length;
+            URL = "<" + sourceURL.Substring(0, firstSlash) + ">";
         }
 
         public SourceView(Source source)

@@ -132,28 +132,35 @@ namespace ReleaseBot
             List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, INTERVAL);
             List<ReleaseView> newReleasesOfServer;
             List<ReleaseView> toPrint = new List<ReleaseView>();
-            newReleases.TryGetValue(serverId, out newReleasesOfServer);
-            for (int i = 0; i < releases.Count; i++)
+            if (newReleases.TryGetValue(serverId, out newReleasesOfServer))
             {
-                if (!newReleasesOfServer.Contains(releases[i]))
+                for (int i = 0; i < releases.Count; i++)
                 {
-                    ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
-                    if (release != null)
-                        release.Sources.AddRange(releases[i].Sources);
-                    else
-                        toPrint.Add(releases[i]);
+                    if (!newReleasesOfServer.Contains(releases[i]))
+                    {
+                        ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
+                        if (release != null)
+                            release.Sources.AddRange(releases[i].Sources);
+                        else
+                            toPrint.Add(releases[i]);
+                    }
                 }
+                newReleasesOfServer.AddRange(toPrint);
+                newReleases.Remove(serverId);
+                newReleases.Add(serverId, newReleasesOfServer);
+                await PrintReleases(toPrint, context);
             }
-            newReleasesOfServer.AddRange(toPrint);
-            newReleases.Remove(serverId);
-            newReleases.Add(serverId, newReleasesOfServer);
-            await PrintReleases(toPrint, context);
+            else
+            {
+                await PrintReleases(releases, context);
+            }
         }
 
         private static async Task PrintReleases(List<ReleaseView> releases, SocketCommandContext context)
         {
+            EmbedBuilder builder = new EmbedBuilder();
             StringBuilder message = new StringBuilder();
-            message.Append(releases.Count).Append(" new releases were found").AppendLine();
+            builder.Title = releases.Count + " new releases were found";
             int releaseNumber = 0;
             foreach (ReleaseView release in releases)
             {
@@ -168,7 +175,8 @@ namespace ReleaseBot
                 else
                     break;
             }
-            await context.Channel.SendMessageAsync(ReleaseCommandModule.Beautify(message.ToString()));
+            builder.Description = message.ToString();
+            await context.Channel.SendMessageAsync("", embed: builder.Build());
         }
 
         private async Task InitCommands()
