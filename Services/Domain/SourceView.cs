@@ -11,20 +11,23 @@ namespace Services.Domain
     {
         public SourceView(string sourceURL)
         {
-            int firstSlash = sourceURL.Substring(8).IndexOf("/") + 8;
-            if (firstSlash == 7) firstSlash = sourceURL.Length;
-            URL = "<" + sourceURL.Substring(0, firstSlash) + ">";
+            URL = CleanURL(sourceURL);
         }
 
         public SourceView(Source source)
         {
-            int firstSlash = source.URL.Substring(8).IndexOf("/") + 8;
-            if (firstSlash == 7) firstSlash = source.URL.Length;
-            URL = "<" + source.URL.Substring(0, firstSlash) + ">";
+            URL = CleanURL(source.URL);
             Category = source.Category;
         }
 
         public string URL { get; set; }
         public string Category { get; set; }
+
+        public static string CleanURL(string sourceURL)
+        {
+            int firstSlash = sourceURL.Substring(8).IndexOf("/") + 8;
+            if (firstSlash == 7) firstSlash = sourceURL.Length;
+            return "<" + sourceURL.Substring(0, firstSlash) + ">";
+        }
     }
 }

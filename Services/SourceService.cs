@@ -20,7 +20,7 @@ namespace Services
         }
 
         private static List<string> sourceURLs = new List<string>();
-        public static bool IsValidSource(ref string arg)
+        public static string FindSource(string arg)
         {
             arg = arg.Trim().ToLower();
             if (sourceURLs.Count == 0)
@@ -31,11 +31,10 @@ namespace Services
             {
                 if (sourceURL.ToLower().IndexOf(arg) > -1)
                 {
-                    arg = sourceURL;
-                    return true;
+                    return sourceURL;
                 }
             }
-            return false;
+            return null;
         }
         private static List<SourceView> sourceViews = new List<SourceView>();
         public static List<SourceView> GetAllViews()
@@ -49,7 +48,7 @@ namespace Services
             return sourceViews;
         }
         private static List<string> categories = new List<string>();
-        public static bool IsValidCategory(ref string arg)
+        public static string FindCategory(string arg)
         {
             arg = arg.Trim().ToLower();
             if (categories.Count == 0)
@@ -60,11 +59,10 @@ namespace Services
             {
                 if (category.ToLower().IndexOf(arg) > -1)
                 {
-                    arg = category;
-                    return true;
+                    return category;
                 }
             }
-            return false;
+            return null;
         }
     }
 }

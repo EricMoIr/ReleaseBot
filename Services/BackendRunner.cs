@@ -19,6 +19,7 @@ namespace Services
             {
                 Timer checkForTime = new Timer(INTERVAL);
                 checkForTime.Elapsed += new ElapsedEventHandler(LookForReleasesEvent);
+                checkForTime.Start();
                 LookForReleases();
             }
             isRunning = true;
@@ -33,7 +34,7 @@ namespace Services
         private static void LookForReleases()
         {
             IEnumerable<Source> releaseURLs = SourceService.GetAll(null, "ReleaseHolder,ChapterNumberHolder");
-            Console.WriteLine("Started looking for releases");
+            Console.WriteLine(DateTime.Now.ToLongTimeString() + "Started looking for releases");
             //This works under the assumption that the next LookForReleases runs after the current
             //one is over
 
@@ -45,7 +46,7 @@ namespace Services
                 List<FoundRelease> releases = ReleaseFinder.GetReleases(source);
                 StoreReleases(releases, source);
             }
-            Console.WriteLine("Finished looking for releases");
+            Console.WriteLine(DateTime.Now.ToLongTimeString() + "Finished looking for releases");
         }
         private static void StoreReleases(List<FoundRelease> releases, Source source)
         {

@@ -32,40 +32,86 @@ namespace ReleaseBot
                 Run.newReleases.Add(guildId, new List<ReleaseView>());
             }
             Run.contexts.Add(guildId, Context);
-            await ReplyAsync("The channel <#" + Context.Channel.Id+"> was set for notifications");
+            await ReplyAsync("The channel <#" + Context.Channel.Id + "> was set for notifications");
         }
         [Command("sub")]
         [Summary("Starts notifying when new releases subscribed pop. Use: '.sub all' or '.sub <source>' or '.sub <category>'")]
-        public async Task SubscribeToAll(string arg)
+        public async Task Subscribe(string arg)
         {
             if (arg == null)
             {
                 ReplyAsync("The correct use of this command is '.sub all' or '.sub <source>' or '.sub <category>'");
             }
-            else if(arg == "all")
+            else if (arg == "all")
             {
                 ReplyAsync("Subscribing to all sources...\n" +
-                    "You will receive a message every hour notifying about the sources you are subscribed to");
+                        "You will receive a message every hour notifying about the sources you are subscribed to");
                 SubscriptionService.SubscribeToAllSources("" + Context.Guild.Id);
             }
-            else if (SourceService.IsValidCategory(ref arg))
-            {
-                ReplyAsync("Subscribing to " + arg + "\n" +
-                    "You will receive a message every hour notifying about the sources you are subscribed to");
-                SubscriptionService.SubscribeToCategory(arg, "" + Context.Guild.Id);
-            }
-            else if(SourceService.IsValidSource(ref arg))
-            {
-                ReplyAsync("Subscribing to "+arg+"\n" +
-                    "You will receive a message every hour notifying about the sources you are subscribed to");
-                SubscriptionService.SubscribeToSource(arg, "" + Context.Guild.Id);
-            }
-            else
-            {
-                await ReplyAsync("You must choose one of the pre-existing sources");
-                await PrintSources("all");
+            else {
+                string category = SourceService.FindCategory(arg);
+                string source = SourceService.FindSource(arg);
+                if (category != null)
+                {
+                    ReplyAsync($"Subscribing to {category}\n" +
+                        "You will receive a message every hour notifying about the sources you are subscribed to");
+                    SubscriptionService.SubscribeToCategory(category, "" + Context.Guild.Id);
+                }
+                else if (source != null)
+                {
+                    ReplyAsync("Subscribing to " + SourceView.CleanURL(source) + "\n" +
+                        "You will receive a message every hour notifying about the sources you are subscribed to");
+                    SubscriptionService.SubscribeToSource(source, "" + Context.Guild.Id);
+                }
+                else
+                {
+                    await ReplyAsync("You must choose one of the pre-existing sources/categories");
+                    await PrintSources("all");
+                }
             }
         }
+        [Command("unsub")]
+        [Summary("Removes the selected subscription. Use: '.unsub all' or '.unsub <source>' or '.unsub <category>'")]
+        public async Task Unsubscribe(string arg)
+        {
+            if (arg == null)
+            {
+                ReplyAsync("The correct use of this command is '.unsub all' or '.unsub <source>' or '.unsub <category>'");
+            }
+            else if (arg == "all")
+            {
+                ReplyAsync("Unsubscribing from all sources...");
+                SubscriptionService.SubscribeToAllSources("" + Context.Guild.Id);
+            }
+            else {
+                string category = SourceService.FindCategory(arg);
+                string source = SourceService.FindSource(arg);
+                if (category != null)
+                {
+                    ReplyAsync("Unsubscribing from " + category);
+                    SubscriptionService.UnsubscribeFromCategory(category, "" + Context.Guild.Id);
+                }
+                else if (source != null)
+                {
+                    ReplyAsync("Unsubscribing from " + SourceView.CleanURL(source));
+                    SubscriptionService.UnsubscribeFromSource(source, "" + Context.Guild.Id);
+                }
+                else
+                {
+                    await ReplyAsync("You must choose one of the pre-existing sources/categories");
+                    await PrintSources("all");
+                }
+            }
+        }
+
+        [Command("subs")]
+        [Summary("Prints all your subscriptions. Use: '.subs'")]
+        public async Task PrintSubscriptions()
+        {
+            List<SourceView> sources = SubscriptionService.GetAll(""+Context.Guild.Id);
+            Printer.PrintSubscriptions(sources, Context.Channel);
+        }
+
 
         //Categories should be a thing later on
         [Command("sources")]
@@ -78,55 +124,29 @@ namespace ReleaseBot
             }
             else
             {
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.Title = "Sources";
-                var sourcesByCategory = SourceService.GetAllViews().GroupBy(x => x.Category);
                 if (arg == "all")
                 {
-                    foreach (var categoryGroup in sourcesByCategory)
-                    {
-                        string category = categoryGroup.Key;
-                        StringBuilder sb = new StringBuilder();
-                        foreach (var source in categoryGroup)
-                        {
-                            sb.AppendLine("- " + source.URL);
-                        }
-                        builder.AddField(f =>
-                        {
-                            f.Name = category;
-                            f.Value = sb.ToString();
-                        });
-                    }
-                    await ReplyAsync("", embed: builder.Build());
+                    var sourcesByCategory = SourceService.GetAllViews().GroupBy(x => x.Category);
+                    await Printer.PrintSources(sourcesByCategory, Context.Channel);
                 }
                 else
-                {//copypaste is bad mmmkay
-                    foreach (var categoryGroup in sourcesByCategory)
+                {
+                    string category = SourceService.FindCategory(arg);
+                    if (category == null)
                     {
-                        string category = categoryGroup.Key;
-                        if (arg.Trim().ToLower() != category.Trim().ToLower()) continue;
-                        StringBuilder sb = new StringBuilder();
-                        foreach (var source in categoryGroup)
-                        {
-                            sb.AppendLine("- " + source.URL);
-                        }
-                        builder.AddField(f =>
-                        {
-                            f.Name = category;
-                            f.Value = sb.ToString();
-                        });
+                        await Printer.PrintError(Printer.CATEGORY_NOT_FOUND, Context.Channel);
                     }
-                    if (builder.Fields.Count == 0)
-                        builder.AddField(f =>
-                        {
-                            f.Name = "Wrong category";
-                            f.Value = "The category used as parameters doesn't exist";
-                        });
-                    await ReplyAsync("", embed: builder.Build());
+                    else
+                    {
+                        var sourcesByCategory = SourceService.GetAllViews()
+                            .Where(x => x.Category == category)
+                            .GroupBy(x => x.Category);
+                        await Printer.PrintSources(sourcesByCategory, Context.Channel);
+                    }
                 }
             }
         }
-        
+
         [Command("releases")]
         [Summary("Prints the last found releases.")]
         public async Task PrintReleases()

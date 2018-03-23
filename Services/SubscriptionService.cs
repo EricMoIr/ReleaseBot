@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Persistence;
 using Persistence.Domain;
+using Services.Domain;
 
 namespace Services
 {
@@ -40,13 +41,44 @@ namespace Services
             }
         }
 
-        public static void SubscribeToCategory(string userName, string category)
+        public static void SubscribeToCategory(string category, string userName)
         {
             var sources = uow.Sources.Get(x => x.Category == category);
             foreach(Source source in sources)
             {
                 SubscribeToSource(source.URL, userName);
             }
+        }
+
+        public static void UnsubscribeFromCategory(string category, string userName)
+        {
+            var sources = uow.Sources.Get(x => x.Category == category);
+            foreach (Source source in sources)
+            {
+                UnsubscribeFromSource(source.URL, userName);
+            }
+        }
+
+        public static void UnsubscribeFromSource(string sourceURL, string userName)
+        {
+            SourceSubscription sub =
+                sourceSubscriptions
+                .Get(x =>
+                x.SourceURL == sourceURL && x.SubscribeeName == userName)
+                .FirstOrDefault();
+            if (sub != null)
+            {
+                sourceSubscriptions.Delete(sub);
+                uow.Save();
+            }
+        }
+
+        public static List<SourceView> GetAll(string userName)
+        {
+            return sourceSubscriptions
+                .Get(x => x.SubscribeeName == userName)
+                .Select(x => new SourceView(x.SourceURL))
+                .ToList();
         }
     }
 }

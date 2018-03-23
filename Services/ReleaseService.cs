@@ -47,17 +47,18 @@ namespace Services
         public static List<ReleaseView> GetNewReleasesOfServer(string serverId, double milliseconds)
         {
             //Actually, I only need one column, not everything. I need to look into this
-            List<SourceSubscription> sourcesSubscribedTo =
-                sourcesSub.Get(x => x.SubscribeeName == serverId).ToList();
+            List<string> sourcesSubscribedTo =
+                sourcesSub.Get(x => x.SubscribeeName == serverId)
+                .Select(x => x.SourceURL).ToList();
             List<ReleaseView> releasesSubscribedTo = new List<ReleaseView>();
             DateTime oldestTime = DateTime.Now.AddMilliseconds(-milliseconds);
-            foreach (SourceSubscription sourceSub in sourcesSubscribedTo)
+            Console.WriteLine($"Oldest time: {oldestTime.ToLongTimeString()}, Now: {DateTime.Now.ToLongTimeString()}");
+            foreach (string sourceURL in sourcesSubscribedTo)
             {
-                releasesSubscribedTo.AddRange(
-                    releases.Get(x => 
-                        x.SourceURL == sourceSub.SourceURL
-                        && x.Time > oldestTime)
-                        .Select(x => new ReleaseView(x)));
+                var releasesFound = releases.Get(x =>
+                        x.SourceURL == sourceURL
+                        && x.Time > oldestTime);
+                releasesSubscribedTo.AddRange(releasesFound.Select(x => new ReleaseView(x)));
             }
             return releasesSubscribedTo;
         }

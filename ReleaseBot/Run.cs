@@ -97,7 +97,8 @@ namespace ReleaseBot
 
             return Task.CompletedTask;
         }
-        private static double INTERVAL = 3600000; //one hour
+        //private static double INTERVAL = 3600000; //one hour
+        private static double INTERVAL = 60000; //one minute
         internal static Dictionary<string, SocketCommandContext> contexts
             = new Dictionary<string, SocketCommandContext>();
         internal static Dictionary<string, List<ReleaseView>> newReleases
@@ -116,7 +117,7 @@ namespace ReleaseBot
 
             System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
             checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
-            checkForTime.Enabled = true;
+            checkForTime.Start();
 
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
