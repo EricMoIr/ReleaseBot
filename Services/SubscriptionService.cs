@@ -80,5 +80,16 @@ namespace Services
                 .Select(x => new SourceView(x.SourceURL))
                 .ToList();
         }
+
+        public static void UnsubscribeFromAllSources(string userName)
+        {
+            var sourceURLs = sourceSubscriptions
+                .Get(x => x.SubscribeeName == userName)
+                .Select(x => x.SourceURL);
+            foreach(string sourceURL in sourceURLs)
+            {
+                UnsubscribeFromSource(sourceURL, userName);
+            }
+        }
     }
 }

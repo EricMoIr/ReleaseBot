@@ -77,6 +77,10 @@ namespace Persistence.Migrations
             {
                 XPath = "//a[@class='chapter']"
             };
+            DOM d12 = new DOM()
+            {
+                XPath = "//a[@class='forum-recent-post-subject']"
+            };
             Source s1 = new Source()
             {
                 URL = "https://animeflv.net",
@@ -107,6 +111,13 @@ namespace Persistence.Migrations
                 ReleaseHolder = d9,
                 ChapterNumberHolder = d10
             };
+            Source s6 = new Source()
+            {
+                URL = "https://chroniclesofelyria.com/forum",
+                ReleaseHolder = d12,
+                ChapterNumberHolder = d12,
+                Category = "Forum"
+            };
             /*context.DOMs.AddOrUpdate(d1);
             context.DOMs.AddOrUpdate(d2);
             context.DOMs.AddOrUpdate(d3);
@@ -120,6 +131,7 @@ namespace Persistence.Migrations
             context.Sources.AddOrUpdate(s3);
             context.Sources.AddOrUpdate(s4);
             context.Sources.AddOrUpdate(s5);
+            context.Sources.AddOrUpdate(s6);
             context.SaveChanges();
         }
     }

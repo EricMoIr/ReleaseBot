@@ -14,9 +14,6 @@ namespace ReleaseBot
 {
     public class ReleaseCommandModule : ModuleBase<SocketCommandContext>
     {
-        //Esta clase se llama desde cada servidor, es decir, si la llamo desde el server A,
-        //el contexto es diferente de si la llamo desde el server B
-        // ~say hello -> hello
         [Command("setchannel")]
         [Summary("Sets this channel as the one to print notifications.")]
         public async Task SetChannel()
@@ -36,7 +33,7 @@ namespace ReleaseBot
         }
         [Command("sub")]
         [Summary("Starts notifying when new releases subscribed pop. Use: '.sub all' or '.sub <source>' or '.sub <category>'")]
-        public async Task Subscribe(string arg)
+        public async Task Subscribe(string arg = null)
         {
             if (arg == null)
             {
@@ -72,7 +69,7 @@ namespace ReleaseBot
         }
         [Command("unsub")]
         [Summary("Removes the selected subscription. Use: '.unsub all' or '.unsub <source>' or '.unsub <category>'")]
-        public async Task Unsubscribe(string arg)
+        public async Task Unsubscribe(string arg = null)
         {
             if (arg == null)
             {
@@ -81,7 +78,7 @@ namespace ReleaseBot
             else if (arg == "all")
             {
                 ReplyAsync("Unsubscribing from all sources...");
-                SubscriptionService.SubscribeToAllSources("" + Context.Guild.Id);
+                SubscriptionService.UnsubscribeFromAllSources("" + Context.Guild.Id);
             }
             else {
                 string category = SourceService.FindCategory(arg);
@@ -116,7 +113,7 @@ namespace ReleaseBot
         //Categories should be a thing later on
         [Command("sources")]
         [Summary("Prints available sources. Use: '.sources all' or '.sources <category>'")]
-        public async Task PrintSources(string arg)
+        public async Task PrintSources(string arg = null)
         {
             if (arg == null)
             {

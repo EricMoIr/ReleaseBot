@@ -6,6 +6,7 @@ using Persistence.Domain;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Linq;
+using System.Web;
 
 namespace Services
 {
@@ -70,7 +71,7 @@ namespace Services
             ret[1] = FindChapter(chapterNode.InnerText.Trim());
             if (releaseNode.Equals(chapterNode))
             {
-                string text = releaseNode.InnerText.Trim();
+                string text = HttpUtility.HtmlDecode(releaseNode.InnerText.Trim());
                 int maxIndex = GetLastIndex(text, ret[1]);
                 if (maxIndex == -1) //Doesn't have chapter
                     ret[0] = RemoveSeparator(text);

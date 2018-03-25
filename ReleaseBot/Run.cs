@@ -97,8 +97,8 @@ namespace ReleaseBot
 
             return Task.CompletedTask;
         }
-        //private static double INTERVAL = 3600000; //one hour
-        private static double INTERVAL = 60000; //one minute
+        private static double INTERVAL = 3600000; //one hour
+        //private static double INTERVAL = 60000; //one minute
         internal static Dictionary<string, SocketCommandContext> contexts
             = new Dictionary<string, SocketCommandContext>();
         internal static Dictionary<string, List<ReleaseView>> newReleases
@@ -178,7 +178,7 @@ namespace ReleaseBot
                 IEnumerable<string> sourceURLs = release.Sources.Select(x => x.URL);
                 StringBuilder inner = new StringBuilder();
                 inner.Append("- ").Append(release.Name)
-                    .Append(" ").Append(release.Chapter)
+                    .Append(" ").Append((release.Chapter == 0)? "": ""+release.Chapter)
                     .Append(" (").Append(string.Join(" ", sourceURLs)).Append(")")
                     .AppendLine();
                 if (ReleaseCommandModule.CanAddToMessage(message, inner) && releaseNumber++ < 15)
