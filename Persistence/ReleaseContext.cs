@@ -15,14 +15,13 @@ namespace Persistence
         public DbSet<ItemSubscription> ItemSubscriptions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Source> Sources { get; set; }
-        public DbSet<DOM> DOMs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<Release>()
-                .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL});
+                .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL, r.DatePublished});
             modelBuilder.Entity<ItemSubscription>()
                 .HasKey(i => new { i.ReleasableTitle, i.SubscribeeName });
             modelBuilder.Entity<SourceSubscription>()

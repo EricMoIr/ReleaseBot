@@ -12,7 +12,6 @@ C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.xml
 C:\Users\Eric\Documents\ReleaseBot\Persistence\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
-C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll.config
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.dll
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\bin\Debug\Persistence.pdb
@@ -24,6 +23,5 @@ C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojRe
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
-C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.XPathonDOM.resources
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Removed_DOM.resources
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.GenerateResource.Cache
-C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Addedcategoryfieldatsources.resources

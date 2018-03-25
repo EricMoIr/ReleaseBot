@@ -24,6 +24,7 @@ namespace Services
         }
         public static void SubscribeToSource(string sourceURL, string userName)
         {
+            User user = UserService.GetOrCreate(userName);
             SourceSubscription sub =
                 sourceSubscriptions
                 .Get(x =>
@@ -34,7 +35,7 @@ namespace Services
                 sub = new SourceSubscription()
                 {
                     SourceURL = sourceURL,
-                    SubscribeeName = userName
+                    SubscribeeName = user.Name
                 };
                 sourceSubscriptions.Insert(sub);
                 uow.Save();

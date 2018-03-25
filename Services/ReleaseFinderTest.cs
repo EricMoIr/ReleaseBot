@@ -30,8 +30,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "12" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "12", null };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -45,8 +45,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "12" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "12", null };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -60,8 +60,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "12" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "12", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -75,8 +75,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name1", "12" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name1", "12", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -90,8 +90,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "1.2" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "1.2", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -105,8 +105,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "1.2" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "1.2", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -120,8 +120,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "1.2" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "1.2", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -135,8 +135,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name1", "1.2" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name1", "1.2", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -150,8 +150,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Movie Name", "0" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Movie Name", "0", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
         [TestMethod]
@@ -165,8 +165,8 @@ namespace Services
             HtmlNode singleRelease = htmlDoc.DocumentNode.SelectNodes(xpathRelease)[0];
             HtmlNode chapterNumber = htmlDoc.DocumentNode.SelectNodes(xpathEpisode)[0];
 
-            string[] details = new string[] { "Name", "10" };
-            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber);
+            string[] details = new string[] { "Name", "10", "" };
+            string[] result = ReleaseFinder.FindDetails(singleRelease, chapterNumber, null);
             CollectionAssert.AreEqual(details, result);
         }
     }

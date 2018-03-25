@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\DOM.cs" />
     <Compile Include="Domain\DomainEntity.cs" />
     <Compile Include="Domain\FoundRelease.cs" />
     <Compile Include="Domain\SourceSubscription.cs" />
@@ -64,13 +63,9 @@
     <Compile Include="Domain\Source.cs" />
     <Compile Include="Domain\ItemSubscription.cs" />
     <Compile Include="Domain\User.cs" />
-    <Compile Include="Migrations\201803201942219_XPath-on-DOM.cs" />
-    <Compile Include="Migrations\201803201942219_XPath-on-DOM.Designer.cs">
-      <DependentUpon>201803201942219_XPath-on-DOM.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803211958422_Added-category-field-at-sources.cs" />
-    <Compile Include="Migrations\201803211958422_Added-category-field-at-sources.Designer.cs">
-      <DependentUpon>201803211958422_Added-category-field-at-sources.cs</DependentUpon>
+    <Compile Include="Migrations\201803252220248_Removed_DOM.cs" />
+    <Compile Include="Migrations\201803252220248_Removed_DOM.Designer.cs">
+      <DependentUpon>201803252220248_Removed_DOM.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,11 +80,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803201942219_XPath-on-DOM.resx">
-      <DependentUpon>201803201942219_XPath-on-DOM.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803211958422_Added-category-field-at-sources.resx">
-      <DependentUpon>201803211958422_Added-category-field-at-sources.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803252220248_Removed_DOM.resx">
+      <DependentUpon>201803252220248_Removed_DOM.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

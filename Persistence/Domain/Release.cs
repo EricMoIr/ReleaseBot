@@ -23,6 +23,8 @@ namespace Persistence.Domain
         public Releasable Item { get; set; }
         [ForeignKey("SourceURL")]
         public Source Source { get; set; }
+        [Key]
+        public string DatePublished { get; set; }
 
         public override bool Equals(object obj)
         {

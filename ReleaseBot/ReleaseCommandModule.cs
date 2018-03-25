@@ -145,10 +145,25 @@ namespace ReleaseBot
         }
 
         [Command("releases")]
-        [Summary("Prints the last found releases.")]
-        public async Task PrintReleases()
+        [Summary("Prints the last found releases. Use: '.releases'")]
+        public async Task PrintReleases(string interval = null)
         {
-            await Run.NotifyServer(Context);
+            if (interval == null)
+            {
+                await Run.NotifyServer(Context, Run.INTERVAL);
+            }
+            else
+            {
+                int hours;
+                if (int.TryParse(interval, out hours) && hours > 0 && hours <= 10)
+                {
+                    await Run.NotifyServer(Context, hours * 3600000);
+                }
+                else
+                {
+                    await ReplyAsync("The correct use of this command is '.releases <hours>'. <hours> is optional and its minimum is 1 hour and maximum 10 hours");
+                }
+            }
         }
 
         internal static bool CanAddToMessage(StringBuilder message, StringBuilder inner)

@@ -15,12 +15,14 @@ namespace Services.Domain
             Name = release.ReleasableTitle;
             Chapter = release.Chapter;
             Sources = new List<SourceView>();
+            DatePublished = release.DatePublished;
             Sources.Add(new SourceView(release.SourceURL));
         }
 
         public string Name { get; set; }
         public double Chapter { get; set; }
         public List<SourceView> Sources { get; set; }
+        public string DatePublished { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -28,7 +30,8 @@ namespace Services.Domain
             {
                 ReleaseView other = (ReleaseView)obj;
                 return other.Chapter == Chapter
-                    && other.Name == Name;
+                    && other.Name == Name
+                    && other.DatePublished == DatePublished;
             }
             return false;
         }

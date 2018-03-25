@@ -13,7 +13,6 @@ namespace Persistence
         public ReleaseRepository<ItemSubscription> ItemSubscriptions { get; }
         public ReleaseRepository<User> Users { get; }
         public ReleaseRepository<Source> Sources { get; }
-        public ReleaseRepository<DOM> DOMs { get; }
 
         private bool disposed = false;
 
@@ -26,7 +25,6 @@ namespace Persistence
             SourceSubscriptions = new ReleaseRepository<SourceSubscription>(context);
             Users = new ReleaseRepository<User>(context);
             Sources = new ReleaseRepository<Source>(context);
-            DOMs = new ReleaseRepository<DOM>(context);
         }
 
         protected virtual void Dispose(bool disposing)

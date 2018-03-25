@@ -33,7 +33,7 @@ namespace Services
         private static DateTime time;
         private static void LookForReleases()
         {
-            IEnumerable<Source> releaseURLs = SourceService.GetAll(null, "ReleaseHolder,ChapterNumberHolder");
+            IEnumerable<Source> releaseURLs = SourceService.GetAll();
             Console.WriteLine(DateTime.Now.ToLongTimeString() + "Started looking for releases");
             //This works under the assumption that the next LookForReleases runs after the current
             //one is over
@@ -58,7 +58,8 @@ namespace Services
                     ReleasableTitle = item.Title,
                     Time = time,
                     Chapter = release.Chapter,
-                    SourceURL = source.URL
+                    SourceURL = source.URL,
+                    DatePublished = release.Date
                 };
                 //Because all the following releases would also already be in the DB
                 if (!ReleaseService.Create(toAdd)) return;

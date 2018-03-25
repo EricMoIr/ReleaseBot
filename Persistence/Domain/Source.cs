@@ -12,8 +12,9 @@ namespace Persistence.Domain
     {
         [Key]
         public virtual string URL { get; set; }
-        public DOM ReleaseHolder { get; set; }
-        public DOM ChapterNumberHolder { get; set; }
+        public string ReleaseHolder { get; set; }
+        public string ChapterNumberHolder { get; set; }
+        public string DateTimeHolder { get; set; }
         public string Category { get; set; }
 
         public override int GetHashCode()

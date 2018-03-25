@@ -7,18 +7,18 @@ namespace Persistence.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class XPathonDOM : IMigrationMetadata
+    public sealed partial class Removed_DOM : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(XPathonDOM));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Removed_DOM));
         
         string IMigrationMetadata.Id
         {
-            get { return "201803201942219_XPath-on-DOM"; }
+            get { return "201803252220248_Removed_DOM"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

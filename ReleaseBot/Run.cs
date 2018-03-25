@@ -57,7 +57,7 @@ namespace ReleaseBot
             _commands.Log += Log;
             
             _client.JoinedGuild += JoinedNewGuild;
-
+            _client.SetGameAsync("Use .help for commands");
         }
 
         private Task JoinedNewGuild(SocketGuild arg)
@@ -97,12 +97,13 @@ namespace ReleaseBot
 
             return Task.CompletedTask;
         }
-        private static double INTERVAL = 3600000; //one hour
+        internal static double INTERVAL = 3600000; //one hour
         //private static double INTERVAL = 60000; //one minute
         internal static Dictionary<string, SocketCommandContext> contexts
             = new Dictionary<string, SocketCommandContext>();
         internal static Dictionary<string, List<ReleaseView>> newReleases
             = new Dictionary<string, List<ReleaseView>>();
+        internal static System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
@@ -113,9 +114,8 @@ namespace ReleaseBot
             await _client.StartAsync();
 
             //The backend eventually will start running independently of the bot
-            BackendRunner.RunBackend(INTERVAL);
+            BackendRunner.RunBackend(INTERVAL/3);
 
-            System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
             checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
             checkForTime.Start();
 
@@ -134,13 +134,13 @@ namespace ReleaseBot
             {
                 SocketCommandContext context;
                 if (contexts.TryGetValue(serverId, out context))
-                    NotifyServer(context);
+                    NotifyServer(context, INTERVAL);
             }
         }
-        internal static async Task NotifyServer(SocketCommandContext context)
+        internal static async Task NotifyServer(SocketCommandContext context, double interval)
         {
             string serverId = "" + context.Guild.Id;
-            List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, INTERVAL);
+            List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, interval);
             List<ReleaseView> newReleasesOfServer;
             List<ReleaseView> toPrint = new List<ReleaseView>();
             if (newReleases.TryGetValue(serverId, out newReleasesOfServer))

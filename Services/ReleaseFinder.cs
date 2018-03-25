@@ -28,10 +28,12 @@ namespace Services
                 Console.WriteLine(e.Message);
                 return new List<FoundRelease>();
             }
-            string releaseXPATH = source.ReleaseHolder.toXPATH();
-            string chapterNumberXPATH = source.ChapterNumberHolder.toXPATH();
+            string releaseXPATH = source.ReleaseHolder;
+            string chapterNumberXPATH = source.ChapterNumberHolder;
+            string dateTimeXPATH = source.DateTimeHolder;
             HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(releaseXPATH);
             HtmlNodeCollection chapterNumbers = htmlDoc.DocumentNode.SelectNodes(chapterNumberXPATH);
+            HtmlNodeCollection dateTimes = string.IsNullOrEmpty(dateTimeXPATH) ? null : htmlDoc.DocumentNode.SelectNodes(dateTimeXPATH);
             if (singleReleases == null)
             {
                 Console.WriteLine("The following XPATH for release holder is not valid or no releases were made: \n"
@@ -45,15 +47,25 @@ namespace Services
                 return new List<FoundRelease>();
             }
             List<FoundRelease> foundReleases = new List<FoundRelease>();
-            for (int i = 0; i < singleReleases.Count; i++)
+            int maxI;
+            if (dateTimes == null)
+                maxI = Math.Min(singleReleases.Count, chapterNumbers.Count);
+            else
+                maxI = Math.Min(singleReleases.Count, Math.Min(chapterNumbers.Count, dateTimes.Count));
+            for (int i = 0; i < maxI; i++)
             {
-                string[] releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i]);
+                string[] releaseDetails;
+                if (dateTimes == null)
+                    releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i], null);
+                else
+                    releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i], dateTimes[i]);
                 try
                 {
                     FoundRelease release = new FoundRelease()
                     {
                         Title = releaseDetails[0],
-                        Chapter = double.Parse(releaseDetails[1])
+                        Chapter = double.Parse(releaseDetails[1]),
+                        Date = releaseDetails[2]
                     };
                     foundReleases.Add(release);
                 }
@@ -65,10 +77,11 @@ namespace Services
             return foundReleases;
         }
 
-        internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode)
+        internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode, HtmlNode dateNode)
         {
-            string[] ret = new string[2];
+            string[] ret = new string[3];
             ret[1] = FindChapter(chapterNode.InnerText.Trim());
+            ret[2] = dateNode == null? "" : dateNode.InnerText;
             if (releaseNode.Equals(chapterNode))
             {
                 string text = HttpUtility.HtmlDecode(releaseNode.InnerText.Trim());
