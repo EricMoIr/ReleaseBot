@@ -25,6 +25,7 @@ namespace Persistence.Domain
         public Source Source { get; set; }
         [Key]
         public string DatePublished { get; set; }
+        public string Link { get; set; }
 
         public override bool Equals(object obj)
         {

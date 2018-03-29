@@ -23,5 +23,4 @@ C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojRe
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
-C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Removed_DOM.resources
-C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.GenerateResource.Cache
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache

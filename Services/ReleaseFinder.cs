@@ -65,7 +65,8 @@ namespace Services
                     {
                         Title = releaseDetails[0],
                         Chapter = double.Parse(releaseDetails[1]),
-                        Date = releaseDetails[2]
+                        Date = releaseDetails[2],
+                        Link = releaseDetails[3]
                     };
                     foundReleases.Add(release);
                 }
@@ -79,9 +80,10 @@ namespace Services
 
         internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode, HtmlNode dateNode)
         {
-            string[] ret = new string[3];
+            string[] ret = new string[4];
             ret[1] = FindChapter(chapterNode.InnerText.Trim());
             ret[2] = dateNode == null? "" : dateNode.InnerText;
+            ret[3] = releaseNode.GetAttributeValue("href", null);
             if (releaseNode.Equals(chapterNode))
             {
                 string text = HttpUtility.HtmlDecode(releaseNode.InnerText.Trim());

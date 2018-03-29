@@ -59,11 +59,33 @@ namespace Services
                     Time = time,
                     Chapter = release.Chapter,
                     SourceURL = source.URL,
-                    DatePublished = release.Date
+                    DatePublished = release.Date,
+                    Link = ParseLink(release.Link, source.URL)
                 };
                 //Because all the following releases would also already be in the DB
                 if (!ReleaseService.Create(toAdd)) return;
             }
+        }
+
+        private static string ParseLink(string link, string sourceURL)
+        {
+            if (link == null) return null;
+            if (link[0] == '/')
+            {
+                if (link[1] == '/')
+                {
+                    string protocol = sourceURL.Substring(0, sourceURL.IndexOf("//") + 2);
+                    return protocol + link.Substring(2);
+                }
+                else
+                {
+                    int firstSlash = sourceURL.Substring(8).IndexOf("/") + 8;
+                    if (firstSlash == 7) firstSlash = sourceURL.Length;
+                    return sourceURL.Substring(0, firstSlash) + link;
+                }
+            }
+            else
+                return link;
         }
     }
 }

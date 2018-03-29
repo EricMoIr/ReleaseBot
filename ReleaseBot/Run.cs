@@ -179,7 +179,7 @@ namespace ReleaseBot
                 StringBuilder inner = new StringBuilder();
                 inner.Append("- ").Append(release.Name)
                     .Append(" ").Append((release.Chapter == 0)? "": ""+release.Chapter)
-                    .Append(" (").Append(string.Join(" ", sourceURLs)).Append(")")
+                    .Append(" (").Append(string.Join(" - ", sourceURLs)).Append(")")
                     .AppendLine();
                 if (ReleaseCommandModule.CanAddToMessage(message, inner) && releaseNumber++ < 15)
                     message.Append(inner);

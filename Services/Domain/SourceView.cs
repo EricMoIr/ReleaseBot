@@ -9,9 +9,12 @@ namespace Services.Domain
 {
     public class SourceView
     {
-        public SourceView(string sourceURL)
+        public SourceView(string sourceURL, bool clean = true)
         {
-            URL = CleanURL(sourceURL);
+            if (clean)
+                URL = CleanURL(sourceURL);
+            else
+                URL = sourceURL;
         }
 
         public SourceView(Source source)

@@ -16,7 +16,10 @@ namespace Services.Domain
             Chapter = release.Chapter;
             Sources = new List<SourceView>();
             DatePublished = release.DatePublished;
-            Sources.Add(new SourceView(release.SourceURL));
+            if(release.Link != null)
+                Sources.Add(new SourceView(release.Link, false));
+            else
+                Sources.Add(new SourceView(release.SourceURL));
         }
 
         public string Name { get; set; }
