@@ -106,19 +106,21 @@ namespace Services
                 text = text.Substring(0, text.Length - 1);
             return text.Trim();
         }
-
+        private static string[] episodeWords = new string[]
+        {
+            "episode",
+            "chapter",
+            "episodio",
+            "capitulo"
+        };
         private static int GetLastIndex(string text, string chapter)
         {
-            //all these words should go into an array and/or be added with ML
             text = text.ToLower();
-            int i = text.IndexOf("episode");
-            if (i > -1) return i;
-            i = text.IndexOf("chapter");
-            if (i > -1) return i;
-            i = text.IndexOf("episodio");
-            if (i > -1) return i;
-            i = text.IndexOf("capitulo");
-            if (i > -1) return i;
+            foreach(string word in episodeWords)
+            {
+                int i = text.IndexOf(word);
+                if (i > -1) return i;
+            }
             return text.LastIndexOf(chapter);
         }
 
