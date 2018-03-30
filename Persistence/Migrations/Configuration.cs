@@ -60,8 +60,8 @@ namespace Persistence.Migrations
             {
                 URL = "https://chroniclesofelyria.com/forum",
                 ReleaseHolder = "//a[@class='forum-recent-post-subject']",
-                ChapterNumberHolder = "//a[@class='forum-recent-post-subject']",
                 DateTimeHolder = "//span[@class='forum-recent-post-timestamp timestamp']",
+                AuthorHolder = "//span[@class='author']",
                 Category = "Forum"
             };
             Source s7 = new Source()
@@ -70,6 +70,13 @@ namespace Persistence.Migrations
                 ReleaseHolder = "//h2[@class='title']",
                 ChapterNumberHolder = "//h2[@class='title']",
                 Category = "Manga"
+            };
+            Source s8 = new Source()
+            {
+                URL = "https://myanimelist.net/forum/?action=recent",
+                ReleaseHolder = "//table[@id='forumTopics']/tr[contains(@id,'topicRow')]/td[2]/a[1]",
+                Category = "Forum",
+                AuthorHolder = "//table[@id='forumTopics']/tr[contains(@id,'topicRow')]/td[5]/a[1]"
             };
             /*
             context.DOMs.AddOrUpdate(d1);
@@ -88,6 +95,7 @@ namespace Persistence.Migrations
             context.Sources.AddOrUpdate(s5);
             context.Sources.AddOrUpdate(s6);
             context.Sources.AddOrUpdate(s7);
+            context.Sources.AddOrUpdate(s8);
             context.SaveChanges();
         }
     }

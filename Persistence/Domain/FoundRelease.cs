@@ -12,6 +12,7 @@ namespace Persistence.Domain
         public double Chapter { get; set; }
         public string Date { get; set; }
         public string Link { get; set; }
+        public string Author { get; set; }
 
         public override bool Equals(object obj)
         {

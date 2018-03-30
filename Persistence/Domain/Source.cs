@@ -16,6 +16,7 @@ namespace Persistence.Domain
         public string ChapterNumberHolder { get; set; }
         public string DateTimeHolder { get; set; }
         public string Category { get; set; }
+        public string AuthorHolder { get; set; }
 
         public override int GetHashCode()
         {

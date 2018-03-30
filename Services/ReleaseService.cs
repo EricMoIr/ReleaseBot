@@ -37,7 +37,8 @@ namespace Services
                 .Get(x =>
                 x.ReleasableTitle == toAdd.ReleasableTitle
                 && x.SourceURL == toAdd.SourceURL 
-                && x.Chapter == toAdd.Chapter);
+                && x.Chapter == toAdd.Chapter
+                && x.TimePublished == toAdd.TimePublished);
             if (repeated.Count() > 0) return false;
             releases.Insert(toAdd);
             uow.Save();
@@ -57,7 +58,7 @@ namespace Services
             {
                 var releasesFound = releases.Get(x =>
                         x.SourceURL == sourceURL
-                        && x.Time > oldestTime);
+                        && x.TimeFound > oldestTime);
                 releasesSubscribedTo.AddRange(releasesFound.Select(x => new ReleaseView(x)));
             }
             return releasesSubscribedTo;

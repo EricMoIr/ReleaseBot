@@ -1,9 +1,7 @@
-﻿using Persistence;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using Persistence.Domain;
-using System.Text.RegularExpressions;
 using System.Text;
 using System.Linq;
 using System.Web;
@@ -12,9 +10,6 @@ namespace Services
 {
     internal class ReleaseFinder
     {
-        public ReleaseFinder()
-        {
-        }
         public static List<FoundRelease> GetReleases(Source source)
         {
             HtmlWeb web = new HtmlWeb();
@@ -23,86 +18,100 @@ namespace Services
             {
                 htmlDoc = web.Load(source.URL);
             }
-            catch(System.Net.WebException e)
+            catch (System.Net.WebException e)
             {
+                Console.WriteLine($"Couldn't connect to the source {source.URL}");
                 Console.WriteLine(e.Message);
                 return new List<FoundRelease>();
             }
-            string releaseXPATH = source.ReleaseHolder;
-            string chapterNumberXPATH = source.ChapterNumberHolder;
-            string dateTimeXPATH = source.DateTimeHolder;
-            HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(releaseXPATH);
-            HtmlNodeCollection chapterNumbers = htmlDoc.DocumentNode.SelectNodes(chapterNumberXPATH);
-            HtmlNodeCollection dateTimes = string.IsNullOrEmpty(dateTimeXPATH) ? null : htmlDoc.DocumentNode.SelectNodes(dateTimeXPATH);
+            HtmlNodeCollection singleReleases = htmlDoc.DocumentNode.SelectNodes(source.ReleaseHolder);
+            HtmlNodeCollection chapterNumbers = null;
+            HtmlNodeCollection dateTimes = null;
+            HtmlNodeCollection authors = null;
+            if (!string.IsNullOrEmpty(source.ChapterNumberHolder))
+                chapterNumbers = htmlDoc.DocumentNode.SelectNodes(source.ChapterNumberHolder);
+            if (!string.IsNullOrEmpty(source.DateTimeHolder))
+                dateTimes = htmlDoc.DocumentNode.SelectNodes(source.DateTimeHolder);
+            if (!string.IsNullOrEmpty(source.AuthorHolder))
+                authors = htmlDoc.DocumentNode.SelectNodes(source.AuthorHolder);
+
             if (singleReleases == null)
             {
                 Console.WriteLine("The following XPATH for release holder is not valid or no releases were made: \n"
-                    + releaseXPATH + " at " + source.URL);
-                return new List<FoundRelease>();
-            }
-            if (chapterNumbers == null)
-            {
-                Console.WriteLine("The following XPATH for chapter numbers holder is not valid or no numbers are recorded: \n"
-                    + chapterNumberXPATH + " at " + source.URL);
+                    + source.ReleaseHolder + " at " + source.URL);
                 return new List<FoundRelease>();
             }
             List<FoundRelease> foundReleases = new List<FoundRelease>();
-            int maxI;
-            if (dateTimes == null)
-                maxI = Math.Min(singleReleases.Count, chapterNumbers.Count);
-            else
-                maxI = Math.Min(singleReleases.Count, Math.Min(chapterNumbers.Count, dateTimes.Count));
+            int maxI = MinSize(singleReleases, chapterNumbers, dateTimes, authors);
             for (int i = 0; i < maxI; i++)
             {
-                string[] releaseDetails;
-                if (dateTimes == null)
-                    releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i], null);
-                else
-                    releaseDetails = FindDetails(singleReleases[i], chapterNumbers[i], dateTimes[i]);
-                try
+                FoundRelease release = new FoundRelease()
                 {
-                    FoundRelease release = new FoundRelease()
-                    {
-                        Title = releaseDetails[0],
-                        Chapter = double.Parse(releaseDetails[1]),
-                        Date = releaseDetails[2],
-                        Link = releaseDetails[3]
-                    };
-                    foundReleases.Add(release);
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("FUCK "+string.Join("_",releaseDetails));
-                }
+                    Title = FindTitle(singleReleases[i], chapterNumbers, i),
+                    Chapter = double.Parse(FindChapter(chapterNumbers, i)),
+                    Date = FindDate(dateTimes, i),
+                    Link = FindLink(singleReleases[i], source),
+                    Author = FindAuthor(authors, i)
+                };
+                foundReleases.Add(release);
             }
             return foundReleases;
         }
 
-        internal static string[] FindDetails(HtmlNode releaseNode, HtmlNode chapterNode, HtmlNode dateNode)
+        private static string FindAuthor(HtmlNodeCollection authors, int i)
         {
-            string[] ret = new string[4];
-            ret[1] = FindChapter(chapterNode.InnerText.Trim());
-            ret[2] = dateNode == null? "" : dateNode.InnerText;
-            ret[3] = releaseNode.GetAttributeValue("href", null);
-            if (releaseNode.Equals(chapterNode))
+            if (authors == null)
+                return "";
+            return authors[i].InnerText;
+        }
+
+        private static string FindLink(HtmlNode node, Source source)
+        {
+            string link = node.GetAttributeValue("href", "");
+            if (link == "") return "";
+            if (link[0] == '/')
             {
-                string text = HttpUtility.HtmlDecode(releaseNode.InnerText.Trim());
-                int maxIndex = GetLastIndex(text, ret[1]);
-                if (maxIndex == -1) //Doesn't have chapter
-                    ret[0] = RemoveSeparator(text);
+                if (link[1] == '/')
+                {
+                    string protocol = source.URL.Substring(0, source.URL.IndexOf("//") + 2);
+                    return protocol + link.Substring(2);
+                }
                 else
-                    ret[0] = RemoveSeparator(text.Substring(0, maxIndex).Trim());
+                {
+                    int firstSlash = source.URL.Substring(8).IndexOf("/") + 8;
+                    if (firstSlash == 7) firstSlash = source.URL.Length;
+                    return source.URL.Substring(0, firstSlash) + link;
+                }
             }
             else
+                return link;
+        }
+
+        private static string FindDate(HtmlNodeCollection dateTimes, int i)
+        {
+            if (dateTimes == null)
+                return "";
+            return dateTimes[i].InnerText;
+        }
+
+        private static int MinSize(params HtmlNodeCollection[] nodes)
+        {
+            if (nodes == null || nodes.Length == 0 || nodes[0] == null)
+                throw new ArgumentException();
+            int min = nodes[0].Count;
+            for (int i = 1; i < nodes.Length; i++)
             {
-                ret[0] = FindTitle(releaseNode.InnerText.Trim());
+                if (nodes[i] != null)
+                {
+                    min = Math.Min(min, nodes[i].Count);
+                }
             }
-            return ret;
+            return min;
         }
 
         private static string RemoveSeparator(string text)
         {
-            if (text[text.Length-1] == ':' || text[text.Length-1] == '-')
+            if (text[text.Length - 1] == ':' || text[text.Length - 1] == '-')
                 text = text.Substring(0, text.Length - 1);
             return text.Trim();
         }
@@ -116,7 +125,7 @@ namespace Services
         private static int GetLastIndex(string text, string chapter)
         {
             text = text.ToLower();
-            foreach(string word in episodeWords)
+            foreach (string word in episodeWords)
             {
                 int i = text.IndexOf(word);
                 if (i > -1) return i;
@@ -124,8 +133,11 @@ namespace Services
             return text.LastIndexOf(chapter);
         }
 
-        private static string FindChapter(string text)
+        private static string FindChapter(HtmlNodeCollection nodes, int i)
         {
+            if (nodes == null) return "0";
+            var node = nodes[i];
+            string text = node.InnerText.Trim();
             if (string.IsNullOrEmpty(text)) return "0";
             string chapter = GetLastDigits(text);
             int index = text.LastIndexOf(chapter);
@@ -136,7 +148,7 @@ namespace Services
             {
                 string sub = text.Substring(0, index - 1);
                 string decimals = GetLastDigits(sub);
-                if(decimals.Length > 0)
+                if (decimals.Length > 0)
                     return decimals + "." + chapter;
                 return chapter;
             }
@@ -164,10 +176,24 @@ namespace Services
             return chapterBuilder.ToString();
         }
 
-        private static string FindTitle(string text)
+        private static string FindTitle(HtmlNode titleNode, HtmlNodeCollection chapterNodes, int i)
         {
-            if (string.IsNullOrEmpty(text)) return "";
-            return text.Trim();
+            if (chapterNodes != null && titleNode.Equals(chapterNodes[i]))
+            {
+                string chapter = FindChapter(chapterNodes, i);
+                string text = HttpUtility.HtmlDecode(titleNode.InnerText.Trim());
+                int maxIndex = GetLastIndex(text, chapter);
+                if (maxIndex == -1) //Doesn't have chapter
+                    return RemoveSeparator(text);
+                else
+                    return RemoveSeparator(text.Substring(0, maxIndex).Trim());
+            }
+            else
+            {
+                string text = titleNode.InnerText.Trim();
+                if (string.IsNullOrEmpty(text)) return "Empty Title";
+                return text.Trim();
+            }
         }
     }
 }

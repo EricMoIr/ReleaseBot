@@ -21,7 +21,7 @@ namespace Persistence
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<Release>()
-                .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL, r.DatePublished});
+                .HasKey(r => new { r.Chapter, r.ReleasableTitle, r.SourceURL, r.TimePublished});
             modelBuilder.Entity<ItemSubscription>()
                 .HasKey(i => new { i.ReleasableTitle, i.SubscribeeName });
             modelBuilder.Entity<SourceSubscription>()

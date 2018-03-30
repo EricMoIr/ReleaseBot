@@ -63,6 +63,14 @@
     <Compile Include="Domain\Source.cs" />
     <Compile Include="Domain\ItemSubscription.cs" />
     <Compile Include="Domain\User.cs" />
+    <Compile Include="Migrations\201803300152548_Renaming_And_Author_Field.cs" />
+    <Compile Include="Migrations\201803300152548_Renaming_And_Author_Field.Designer.cs">
+      <DependentUpon>201803300152548_Renaming_And_Author_Field.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803300332425_Author_Field.cs" />
+    <Compile Include="Migrations\201803300332425_Author_Field.Designer.cs">
+      <DependentUpon>201803300332425_Author_Field.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseContext.cs" />
@@ -74,6 +82,14 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803300152548_Renaming_And_Author_Field.resx">
+      <DependentUpon>201803300152548_Renaming_And_Author_Field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803300332425_Author_Field.resx">
+      <DependentUpon>201803300332425_Author_Field.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

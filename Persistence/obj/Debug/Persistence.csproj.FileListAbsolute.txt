@@ -24,3 +24,6 @@ C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.C
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.dll
 C:\Users\Usuario\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.pdb
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResolveAssemblyReference.cache
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Renaming_And_Author_Field.resources
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.GenerateResource.Cache
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Author_Field.resources
