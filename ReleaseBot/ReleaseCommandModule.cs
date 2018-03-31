@@ -105,7 +105,7 @@ namespace ReleaseBot
         [Summary("Prints all your subscriptions. Use: '.subs'")]
         public async Task PrintSubscriptions()
         {
-            List<SourceView> sources = SubscriptionService.GetAll(""+Context.Guild.Id);
+            List<SourceView> sources = SubscriptionService.GetAll("" + Context.Guild.Id);
             Printer.PrintSubscriptions(sources, Context.Channel);
         }
 
@@ -157,13 +157,99 @@ namespace ReleaseBot
                 int hours;
                 if (int.TryParse(interval, out hours) && hours > 0 && hours <= 10)
                 {
-                    await Run.NotifyServer(Context, hours * 3600000);
+                    await Run.NotifyServerWithRepeated(Context, hours * 3600000);
                 }
                 else
                 {
                     await ReplyAsync("The correct use of this command is '.releases <hours>'. <hours> is optional and its minimum is 1 hour and maximum 10 hours");
                 }
             }
+        }
+
+        [Command("stalk")]
+        [Summary("Prints information about a given user. Use: '.stalk <user_name> <source>'")]
+        public async Task PrintStats(string username, string sourceURL)
+        {
+            User user = ReleaseService.GetUser(username, sourceURL);
+            if (user == null)
+            {
+                await ReplyAsync("I couldn't find any information about that user in our database :cold_sweat:");
+            }
+            else
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.Title = "Stats of " + user.Name;
+
+                foreach (SourceView source in user.SourcesWrittenAt())
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("Reported posts: ").AppendLine("" + user.PostsAt(source))
+                        .Append("Thread with highest activity: ").AppendLine(user.MostUsedThread(source))
+                        .Append("Day with highest activity: ").AppendLine(IntToDay(user.BusiestDay(source)))
+                        .Append("Day with least activity: ").AppendLine(IntToDay(user.LeastBusyDay(source)))
+                        .AppendLine("Times with least activity recorded:");
+                    var a = sb.Length;
+                    var offlineTimes = user.OfflineTimes(source);
+                    for (int i = 0; i < 7; i++)
+                    {
+                        string day = IntToDay(i);
+                        sb.Append(day).AppendLine(": ");
+                        if (offlineTimes[i].Count == 0)
+                        {
+                            sb.AppendLine("No inactivity");
+                            continue;
+                        }
+                        int min = offlineTimes[i][0];
+                        int max = min + 1;
+
+                        sb.Append(min).Append(" - ");
+
+                        for (int j = 1; j < offlineTimes[i].Count; j++)
+                        {
+                            if (offlineTimes[i][j] == max)
+                            {
+                                max++;
+                                continue;
+                            }
+                            min = offlineTimes[i][j];
+                            sb.AppendLine("" + max).Append(min).Append(" - ");
+                            max += 2;
+                        }
+                        sb.AppendLine("" + max);
+                    }
+                    var b = sb.Length;
+                    builder.AddField(f =>
+                    {
+                        f.Name = source.URL;
+                        f.Value = sb.ToString();
+                    });
+                }
+                await ReplyAsync("", embed: builder.Build());
+            }
+        }
+
+        private string IntToDay(int i)
+        {
+            switch (i)
+            {
+                case 1: return "Monday";
+                case 2: return "Tuesday";
+                case 3: return "Wednesday";
+                case 4: return "Thursday";
+                case 5: return "Friday";
+                case 6: return "Saturday";
+                default: return "Sunday";
+            }
+        }
+
+        protected override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null)
+        {
+            if (embed != null)
+                return base.ReplyAsync(message, isTTS, embed, options);
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.Title = "ReleaseBot";
+            builder.Description = message;
+            return base.ReplyAsync("", isTTS, builder.Build(), options);
         }
 
         internal static bool CanAddToMessage(StringBuilder message, StringBuilder inner)

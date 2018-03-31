@@ -52,10 +52,10 @@ namespace ReleaseBot
                 LogLevel = LogSeverity.Info,
                 CaseSensitiveCommands = false,
             });
-            
+
             _client.Log += Log;
             _commands.Log += Log;
-            
+
             _client.JoinedGuild += JoinedNewGuild;
             _client.SetGameAsync("Use .help for commands");
         }
@@ -99,10 +99,6 @@ namespace ReleaseBot
         }
         internal static double INTERVAL = 3600000; //one hour
         //private static double INTERVAL = 60000; //one minute
-        internal static Dictionary<string, SocketCommandContext> contexts
-            = new Dictionary<string, SocketCommandContext>();
-        internal static Dictionary<string, List<ReleaseView>> newReleases
-            = new Dictionary<string, List<ReleaseView>>();
         internal static System.Timers.Timer checkForTime = new System.Timers.Timer(INTERVAL);
         private async Task MainAsync()
         {
@@ -114,7 +110,7 @@ namespace ReleaseBot
             await _client.StartAsync();
 
             //The backend eventually will start running independently of the bot
-            BackendRunner.RunBackend(INTERVAL/3);
+            BackendRunner.RunBackend(INTERVAL / 3);
 
             checkForTime.Elapsed += new ElapsedEventHandler(NotifyServersEvent);
             checkForTime.Start();
@@ -128,6 +124,10 @@ namespace ReleaseBot
             NotifyServers();
         }
 
+        internal static Dictionary<string, SocketCommandContext> contexts
+            = new Dictionary<string, SocketCommandContext>();
+        internal static Dictionary<string, List<ReleaseView>> newReleases
+            = new Dictionary<string, List<ReleaseView>>();
         private void NotifyServers()
         {
             foreach (string serverId in contexts.Keys)
@@ -141,24 +141,18 @@ namespace ReleaseBot
         {
             string serverId = "" + context.Guild.Id;
             List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, interval);
-            List<ReleaseView> newReleasesOfServer;
             List<ReleaseView> toPrint = new List<ReleaseView>();
-            if (newReleases.TryGetValue(serverId, out newReleasesOfServer))
+            if (newReleases.ContainsKey(serverId))
             {
+                List<ReleaseView> newReleasesOfServer = newReleases[serverId];
                 for (int i = 0; i < releases.Count; i++)
                 {
                     if (!newReleasesOfServer.Contains(releases[i]))
                     {
-                        ReleaseView release = toPrint.Find(x => x.Equals(releases[i]));
-                        if (release != null)
-                            release.Sources.AddRange(releases[i].Sources);
-                        else
-                            toPrint.Add(releases[i]);
+                        toPrint.Add(releases[i]);
                     }
                 }
-                newReleasesOfServer.AddRange(toPrint);
-                newReleases.Remove(serverId);
-                newReleases.Add(serverId, newReleasesOfServer);
+                newReleases[serverId].AddRange(toPrint);
                 await PrintReleases(toPrint, context);
             }
             else
@@ -171,15 +165,31 @@ namespace ReleaseBot
         {
             EmbedBuilder builder = new EmbedBuilder();
             StringBuilder message = new StringBuilder();
-            builder.Title = releases.Count + " new releases were found";
+
+            var sources = releases.Select(x => x.Source.ToString()).Distinct();
+            var releasesBySource = releases.GroupBy(x => new { x.Name, x.Chapter, x.DatePublished });
+            List<ReleaseView> toPrint = new List<ReleaseView>();
+            List<List<string>> linksPerRelease = new List<List<string>>();
+            foreach(var group in releasesBySource)
+            {
+                List<string> links = new List<string>();
+                toPrint.Add(group.FirstOrDefault());
+                foreach (var releasesOfSource in group)
+                {
+                    links.Add(releasesOfSource.Source.ToString());
+                }
+                linksPerRelease.Add(links);
+            }
+
+            builder.Title = toPrint.Count + " new releases were found";
             int releaseNumber = 0;
+            int i = 0;
             foreach (ReleaseView release in releases)
             {
-                IEnumerable<string> sourceURLs = release.Sources.Select(x => x.URL);
                 StringBuilder inner = new StringBuilder();
                 inner.Append("- ").Append(release.Name)
-                    .Append(" ").Append((release.Chapter == 0)? "": ""+release.Chapter)
-                    .Append(" (").Append(string.Join(" - ", sourceURLs)).Append(")")
+                    .Append(" ").Append((release.Chapter == 0) ? "" : "" + release.Chapter)
+                    .Append(" (").Append(string.Join(" - ", linksPerRelease[i++])).Append(")")
                     .AppendLine();
                 if (ReleaseCommandModule.CanAddToMessage(message, inner) && releaseNumber++ < 15)
                     message.Append(inner);
@@ -188,6 +198,13 @@ namespace ReleaseBot
             }
             builder.Description = message.ToString();
             await context.Channel.SendMessageAsync("", embed: builder.Build());
+        }
+
+        internal static async Task NotifyServerWithRepeated(SocketCommandContext context, int interval)
+        {
+            string serverId = "" + context.Guild.Id;
+            List<ReleaseView> releases = ReleaseService.GetNewReleasesOfServer(serverId, interval);
+            await PrintReleases(releases, context);
         }
 
         private async Task InitCommands()

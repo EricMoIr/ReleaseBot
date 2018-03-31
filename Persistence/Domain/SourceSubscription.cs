@@ -13,7 +13,7 @@ namespace Persistence.Domain
         [Key]
         public string SubscribeeName { get; set; }
         [ForeignKey("SubscribeeName")]
-        public User Subscribee { get; set; }
+        public Subscriber Subscribee { get; set; }
 
         [Key]
         public string SourceURL { get; set; }

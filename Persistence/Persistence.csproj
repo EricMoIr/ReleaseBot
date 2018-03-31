@@ -62,7 +62,7 @@
     <Compile Include="Domain\Release.cs" />
     <Compile Include="Domain\Source.cs" />
     <Compile Include="Domain\ItemSubscription.cs" />
-    <Compile Include="Domain\User.cs" />
+    <Compile Include="Domain\Subscriber.cs" />
     <Compile Include="Migrations\201803300152548_Renaming_And_Author_Field.cs" />
     <Compile Include="Migrations\201803300152548_Renaming_And_Author_Field.Designer.cs">
       <DependentUpon>201803300152548_Renaming_And_Author_Field.cs</DependentUpon>
@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201803300332425_Author_Field.cs" />
     <Compile Include="Migrations\201803300332425_Author_Field.Designer.cs">
       <DependentUpon>201803300332425_Author_Field.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803302126355_I-Forgot.cs" />
+    <Compile Include="Migrations\201803302126355_I-Forgot.Designer.cs">
+      <DependentUpon>201803302126355_I-Forgot.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803300332425_Author_Field.resx">
       <DependentUpon>201803300332425_Author_Field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803302126355_I-Forgot.resx">
+      <DependentUpon>201803302126355_I-Forgot.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

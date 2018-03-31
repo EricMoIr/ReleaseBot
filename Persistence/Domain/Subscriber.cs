@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Persistence.Domain
 {
     //This would be the discord server running my bot
-    public class User : DomainEntity
+    public class Subscriber : DomainEntity
     {
         [Key]
         public virtual string Name { get; set; }

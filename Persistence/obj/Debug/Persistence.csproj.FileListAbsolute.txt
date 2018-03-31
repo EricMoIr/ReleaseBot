@@ -27,3 +27,4 @@ C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csprojResol
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Renaming_And_Author_Field.resources
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.csproj.GenerateResource.Cache
 C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.Author_Field.resources
+C:\Users\Eric\Documents\ReleaseBot\Persistence\obj\Debug\Persistence.Migrations.IForgot.resources

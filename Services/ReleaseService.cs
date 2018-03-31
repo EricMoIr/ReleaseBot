@@ -26,10 +26,6 @@ namespace Services
             }
             return releasesSubscribedTo;
         }
-        internal static List<Release> GetReleasesOfSource(string sourceURL)
-        {
-            return releases.Get(x => x.SourceURL == sourceURL).ToList();
-        }
 
         internal static bool Create(Release toAdd)
         {
@@ -47,7 +43,6 @@ namespace Services
 
         public static List<ReleaseView> GetNewReleasesOfServer(string serverId, double milliseconds)
         {
-            //Actually, I only need one column, not everything. I need to look into this
             List<string> sourcesSubscribedTo =
                 sourcesSub.Get(x => x.SubscribeeName == serverId)
                 .Select(x => x.SourceURL).ToList();
@@ -62,6 +57,37 @@ namespace Services
                 releasesSubscribedTo.AddRange(releasesFound.Select(x => new ReleaseView(x)));
             }
             return releasesSubscribedTo;
+        }
+
+        public static User GetUser(string argUser, string argSource)
+        {
+            string source = SourceService.FindSource(argSource);
+            if (source == null)
+                return null;
+            string username = FindUser(argUser, source);
+            if (username != null)
+            {
+                var releasesOfAuthor = releases.Get(x =>
+                x.SourceURL == source
+                && x.Author == username).Select(x => new ReleaseView(x));
+                return new User(username, releasesOfAuthor);
+            }
+            else
+                return null;
+        }
+        private static string FindUser(string arg, string source)
+        {
+            arg = arg.Trim().ToLower();
+            var usernames = releases.Get(x => x.SourceURL == source).Select(x => x.Author);
+            foreach (string name in usernames)
+            {
+                if (name == null) continue;
+                if (name.ToLower().IndexOf(arg) > -1)
+                {
+                    return name;
+                }
+            }
+            return null;
         }
     }
 }

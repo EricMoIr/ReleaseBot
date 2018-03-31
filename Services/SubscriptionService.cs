@@ -15,7 +15,7 @@ namespace Services
         private static ReleaseRepository<SourceSubscription> sourceSubscriptions = uow.SourceSubscriptions;
         public static void SubscribeToAllSources(string userId)
         {
-            User user = UserService.GetOrCreate(userId);
+            Subscriber user = SubscriberService.GetOrCreate(userId);
             IEnumerable<Source> sources = SourceService.GetAll();
             foreach(Source source in sources)
             {
@@ -24,7 +24,7 @@ namespace Services
         }
         public static void SubscribeToSource(string sourceURL, string userName)
         {
-            User user = UserService.GetOrCreate(userName);
+            Subscriber user = SubscriberService.GetOrCreate(userName);
             SourceSubscription sub =
                 sourceSubscriptions
                 .Get(x =>

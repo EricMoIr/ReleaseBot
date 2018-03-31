@@ -13,7 +13,7 @@ namespace Persistence
         public DbSet<Releasable> Releasables { get; set; }
         public DbSet<SourceSubscription> SourceSubscriptions { get; set; }
         public DbSet<ItemSubscription> ItemSubscriptions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Subscriber> Users { get; set; }
         public DbSet<Source> Sources { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

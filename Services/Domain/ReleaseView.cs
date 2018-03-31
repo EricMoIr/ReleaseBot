@@ -14,18 +14,16 @@ namespace Services.Domain
         {
             Name = release.ReleasableTitle;
             Chapter = release.Chapter;
-            Sources = new List<SourceView>();
             DatePublished = release.TimePublished;
-            if(!string.IsNullOrEmpty(release.Link))
-                Sources.Add(new SourceView(release.Link, false));
-            else
-                Sources.Add(new SourceView(release.SourceURL));
+            DateFound = release.TimeFound;
+            Source = new SourceView(release.SourceURL, release.Link);
         }
 
         public string Name { get; set; }
         public double Chapter { get; set; }
-        public List<SourceView> Sources { get; set; }
+        public SourceView Source { get; set; }
         public string DatePublished { get; set; }
+        public DateTime DateFound { get; set;}
 
         public override bool Equals(object obj)
         {
@@ -34,9 +32,18 @@ namespace Services.Domain
                 ReleaseView other = (ReleaseView)obj;
                 return other.Chapter == Chapter
                     && other.Name == Name
-                    && other.DatePublished == DatePublished;
+                    && other.DatePublished == DatePublished
+                    && other.Source.Equals(Source);
             }
             return false;
+        }
+        public override int GetHashCode()
+        {
+            long hash = 0;
+            hash += Chapter.GetHashCode();
+            hash += Name.GetHashCode();
+            hash += DatePublished.GetHashCode();
+            return hash.GetHashCode();
         }
     }
 }
