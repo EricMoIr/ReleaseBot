@@ -18,17 +18,7 @@ namespace ReleaseBot
         [Summary("Sets this channel as the one to print notifications.")]
         public async Task SetChannel()
         {
-            string guildId = "" + Context.Guild.Id;
-            //Not sure if updating context is needed. Needs testing
-            if (Run.contexts.ContainsKey(guildId))
-            {
-                Run.contexts.Remove(guildId);
-            }
-            else
-            {
-                Run.newReleases.Add(guildId, new List<ReleaseView>());
-            }
-            Run.contexts.Add(guildId, Context);
+            BotService.AddGuild(Context);
             await ReplyAsync("The channel <#" + Context.Channel.Id + "> was set for notifications");
         }
         [Command("sub")]
@@ -37,11 +27,11 @@ namespace ReleaseBot
         {
             if (arg == null)
             {
-                ReplyAsync("The correct use of this command is '.sub all' or '.sub <source>' or '.sub <category>'");
+                await ReplyAsync("The correct use of this command is '.sub all' or '.sub <source>' or '.sub <category>'");
             }
             else if (arg == "all")
             {
-                ReplyAsync("Subscribing to all sources...\n" +
+                await ReplyAsync("Subscribing to all sources...\n" +
                         "You will receive a message every hour notifying about the sources you are subscribed to");
                 SubscriptionService.SubscribeToAllSources("" + Context.Guild.Id);
             }
@@ -50,13 +40,13 @@ namespace ReleaseBot
                 string source = SourceService.FindSource(arg);
                 if (category != null)
                 {
-                    ReplyAsync($"Subscribing to {category}\n" +
+                    await ReplyAsync($"Subscribing to {category}\n" +
                         "You will receive a message every hour notifying about the sources you are subscribed to");
                     SubscriptionService.SubscribeToCategory(category, "" + Context.Guild.Id);
                 }
                 else if (source != null)
                 {
-                    ReplyAsync("Subscribing to " + SourceView.CleanURL(source) + "\n" +
+                    await ReplyAsync("Subscribing to " + SourceView.CleanURL(source) + "\n" +
                         "You will receive a message every hour notifying about the sources you are subscribed to");
                     SubscriptionService.SubscribeToSource(source, "" + Context.Guild.Id);
                 }
@@ -73,11 +63,11 @@ namespace ReleaseBot
         {
             if (arg == null)
             {
-                ReplyAsync("The correct use of this command is '.unsub all' or '.unsub <source>' or '.unsub <category>'");
+                await ReplyAsync("The correct use of this command is '.unsub all' or '.unsub <source>' or '.unsub <category>'");
             }
             else if (arg == "all")
             {
-                ReplyAsync("Unsubscribing from all sources...");
+                await ReplyAsync("Unsubscribing from all sources...");
                 SubscriptionService.UnsubscribeFromAllSources("" + Context.Guild.Id);
             }
             else {
@@ -85,12 +75,12 @@ namespace ReleaseBot
                 string source = SourceService.FindSource(arg);
                 if (category != null)
                 {
-                    ReplyAsync("Unsubscribing from " + category);
+                    await ReplyAsync("Unsubscribing from " + category);
                     SubscriptionService.UnsubscribeFromCategory(category, "" + Context.Guild.Id);
                 }
                 else if (source != null)
                 {
-                    ReplyAsync("Unsubscribing from " + SourceView.CleanURL(source));
+                    await ReplyAsync("Unsubscribing from " + SourceView.CleanURL(source));
                     SubscriptionService.UnsubscribeFromSource(source, "" + Context.Guild.Id);
                 }
                 else
@@ -106,7 +96,7 @@ namespace ReleaseBot
         public async Task PrintSubscriptions()
         {
             List<SourceView> sources = SubscriptionService.GetAll("" + Context.Guild.Id);
-            Printer.PrintSubscriptions(sources, Context.Channel);
+            await Printer.PrintSubscriptions(sources, Context.Channel);
         }
 
 
@@ -117,7 +107,7 @@ namespace ReleaseBot
         {
             if (arg == null)
             {
-                ReplyAsync("The correct use of this command is '.sources all' or '.sources <category>'");
+                await ReplyAsync("The correct use of this command is '.sources all' or '.sources <category>'");
             }
             else
             {
@@ -150,14 +140,14 @@ namespace ReleaseBot
         {
             if (interval == null)
             {
-                await Run.NotifyServer(Context, Run.INTERVAL);
+                await BotService.NotifyServer(Context);
             }
             else
             {
                 int hours;
                 if (int.TryParse(interval, out hours) && hours > 0 && hours <= 10)
                 {
-                    await Run.NotifyServerWithRepeated(Context, hours * 3600000);
+                    await BotService.NotifyServerWithRepeated(Context, hours * 3600000);
                 }
                 else
                 {
@@ -188,7 +178,6 @@ namespace ReleaseBot
                         .Append("Day with highest activity: ").AppendLine(IntToDay(user.BusiestDay(source)))
                         .Append("Day with least activity: ").AppendLine(IntToDay(user.LeastBusyDay(source)))
                         .AppendLine("Times with least activity recorded:");
-                    var a = sb.Length;
                     var offlineTimes = user.OfflineTimes(source);
                     for (int i = 0; i < 7; i++)
                     {
@@ -217,7 +206,6 @@ namespace ReleaseBot
                         }
                         sb.AppendLine("" + max);
                     }
-                    var b = sb.Length;
                     builder.AddField(f =>
                     {
                         f.Name = source.URL;

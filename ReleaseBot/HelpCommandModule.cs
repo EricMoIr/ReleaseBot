@@ -27,9 +27,8 @@ namespace ReleaseBot
         private void AddHelp(IEnumerable<ModuleInfo> allMods, ref EmbedBuilder builder)
         {
             Stack<ModuleInfo> modules = new Stack<ModuleInfo>();
-            foreach(ModuleInfo mod in allMods)
+            foreach (ModuleInfo mod in allMods)
                 modules.Push(mod);
-            //StringBuilder commands = new StringBuilder();
             while (modules.Count > 0)
             {
                 ModuleInfo module = modules.Pop();
@@ -38,16 +37,10 @@ namespace ReleaseBot
                 foreach (CommandInfo command in module.Commands)
                     builder.AddField(f =>
                     {
-                        f.Name = "."+command.Name;
+                        f.Name = "." + command.Name;
                         f.Value = command.Summary;
                     });
-                //commands.AppendLine($"{ string.Join("\n", module.Commands.Select(x => $"`.{x.Name}: {x.Summary}`"))}");
             }
-            /*builder.AddField(f =>
-            {
-                f.Name = "Command list";
-                f.Value = commands.ToString();
-            });*/
         }
     }
 }
